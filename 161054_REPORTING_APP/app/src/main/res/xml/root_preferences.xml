@@ -1,0 +1,58 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<PreferenceCategory app:title="@string/messages_header">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/signature_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="reply"
+            app:title="@string/reply_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/sync_header">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/sync_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sync"
+            app:key="attachment"
+            app:summaryOff="@string/attachment_summary_off"
+            app:summaryOn="@string/attachment_summary_on"
+            app:title="@string/attachment_title" />
+
+    </PreferenceCategory>-->
+
+    <PreferenceCategory
+        app:title="Sync"
+        app:icon="@drawable/ic_sync">
+
+        <SwitchPreferenceCompat
+            app:summaryOff="You will have to manually sync emergency contact details"
+            app:key="syncContacts"
+            app:title="Sync emergency contacts"
+            app:summary="Sync emergency contacts with remote database periodically"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/ic_user_profile"
+        app:title="Personal Information">
+
+        <Preference
+            app:key="userProfile"
+            app:title="User Profile"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

@@ -13,7 +13,10 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_empty_view.xml" value="0.12083333333333333" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_import_contact.xml" value="0.21041666666666667" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_location.xml" value="0.10729166666666666" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.17083333333333334" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_settings.xml" value="0.27708333333333335" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash.xml" value="0.33" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_sync.xml" value="0.27708333333333335" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_user_profile.xml" value="0.27282051282051284" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/activity_authentication.xml" value="0.1308876811594203" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/activity_main.xml" value="0.1046875" />
@@ -32,6 +35,7 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/main_activity.xml" value="0.17255434782608695" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/menu/menu_add_contacts.xml" value="0.19427083333333334" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/xml/root_preferences.xml" value="0.12047101449275362" />
       </map>
     </option>
   </component>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_settings"
+    app:startDestination="@id/navigation_settings_screen">
+
+    <fragment
+        android:id="@+id/navigation_settings_screen"
+        android:name="org.xhanka.ndm_project.ui.settings.SettingsFragment"
+        android:label="Settings" >
+        <action
+            android:id="@+id/action_navigation_settings_to_navigation_user_profile"
+            app:destination="@id/navigation_user_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_user_profile"
+        android:name="org.xhanka.ndm_project.ui.settings.UserProfileFragment"
+        android:label="User Profile"
+        tools:layout="@layout/fragment_user_profile"/>
+
+</navigation>

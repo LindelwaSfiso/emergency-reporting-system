@@ -5,7 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.xhanka.ndm_project.databinding.FragmentUserProfileBinding
+
+
+/**
+ * Fragment for modifying user information
+ *
+ * Information required from user:
+ *  -> user ID
+ *  -> user full name
+ *  -> usr phone number [use registered phone number]
+ *  - photo [!!!]
+ *
+ */
 
 class UserProfileFragment : Fragment() {
 

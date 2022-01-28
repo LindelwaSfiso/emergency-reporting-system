@@ -74,10 +74,11 @@ class HomeFragment : Fragment() {
         buildLocationSettingsRequest()
 
         homeViewModel.userDeniedPermissions.observe(this, {
-            if (it > 1) {
+            Log.d("TAG", "COUNTING:\t$it")
+
                 // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
-                userHasDeniedPermissions = true
-            }
+                userHasDeniedPermissions = it
+
         })
     }
 
@@ -124,12 +125,15 @@ class HomeFragment : Fragment() {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) {
                     Log.d("TAG", "GETTING LAST KNOWN LOCATION FORM FUSED LOCATION")
 
+                    // todo: last known location has a very low accuracy > 2.5Km !!
+
                     if (it.isSuccessful && it.result != null) {
                         mCurrentLocation = it.result
                         updateUI()
                     }
                 }
 
+                // register for location updates
                 mFusedLocationClient.requestLocationUpdates(
                     mLocationRequest,
                     mLocationCallback,
@@ -142,6 +146,9 @@ class HomeFragment : Fragment() {
                 when ((e as ApiException).statusCode) {
 
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
+                        // either usr has not selected HIGH_PRECISION for location
+                        // or their LOCATION is turned off
+
                         Log.d(
                             "TAG",
                             "Location settings are not satisfied. Attempting to upgrade " +
@@ -161,6 +168,7 @@ class HomeFragment : Fragment() {
                     }
 
                     LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+
                         val errorMessage = "Location settings are inadequate, and cannot be " +
                                 "fixed here. Fix in Settings."
 
@@ -168,7 +176,6 @@ class HomeFragment : Fragment() {
                         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
                     }
                 }
-                showPermissionError()
             }
     }
 
@@ -182,7 +189,8 @@ class HomeFragment : Fragment() {
 
             binding.accuracy2.text = String.format("${it.accuracy} m")
             binding.lastUpdate2.text = SimpleDateFormat.getInstance().format(Date())
-            binding.altitude2.text = if(it.hasAccuracy()) String.format("${it.altitude} m") else "N/A"
+            binding.altitude2.text =
+                if (it.hasAccuracy()) String.format("${it.altitude} m") else "N/A"
         } // consider showing errors if we can't get location
     }
 
@@ -196,32 +204,35 @@ class HomeFragment : Fragment() {
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
-        when (shouldProvideRationale) {
-            true -> {
-                Log.d("TAG", "Displaying permission rationale to provide additional context.")
+        if (shouldProvideRationale) {
+            Log.d("TAG", "Displaying permission rationale to provide additional context.")
 
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
-                    REQUEST_LOCATION_PERMISSION_CODE
-                )
-            }
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION_CODE
+            )
 
-            userHasDeniedPermissions -> {
-                // user has permanently denied location permission
-                showPermissionError()
-                binding.permissionDeniedContainer.requestPermissionsButton.setOnClickListener {
-                    Utils.requestPermissionsFromSettings(it.context)
-                }
-            }
-
-            else -> {
-                homeViewModel.addCount()
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
-                    REQUEST_LOCATION_PERMISSION_CODE
-                )
-            }
+            return
         }
+
+        if (userHasDeniedPermissions) {
+            // user has permanently denied location permission, by checking "Don't ask again"
+            // redirect user to settings so that they grant manually
+            showPermissionError()
+            binding.permissionDeniedContainer.requestPermissionsButton.setOnClickListener {
+                Utils.requestPermissionsFromSettings(it.context)
+            }
+
+            return
+        }
+
+        // ELSE
+
+        homeViewModel.updateLocationPermissionStatus()
+        ActivityCompat.requestPermissions(
+            requireActivity(), arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
+            REQUEST_LOCATION_PERMISSION_CODE
+        )
     }
 
     private fun checkPermissions(): Boolean {
@@ -236,8 +247,8 @@ class HomeFragment : Fragment() {
         super.onResume()
 
         if (mCurrentLocation == null)
-            // remove this consider using view model to store current location
-            // show loading animation while loading
+        // remove this consider using view model to store current location
+        // show loading animation while loading
             showInitializing()
 
         if (checkPermissions()) startLocationUpdates()
@@ -264,7 +275,8 @@ class HomeFragment : Fragment() {
 
     private fun showInitializing() {
         binding.displayContainer.visibility = View.GONE
-        binding.locationInitializingContainer.locationInitializingContainer2.visibility = View.VISIBLE
+        binding.locationInitializingContainer.locationInitializingContainer2.visibility =
+            View.VISIBLE
         binding.permissionDeniedContainer.permissionDeniedContainer2.visibility = View.GONE
     }
 

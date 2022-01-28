@@ -17,9 +17,9 @@
         android:title="@string/title_emergency_contacts_short" />
 
     <item
-        android:id="@+id/navigation_user_profile"
-        android:icon="@drawable/ic_user_profile"
-        android:title="@string/profile" />
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
 
 </menu>
 

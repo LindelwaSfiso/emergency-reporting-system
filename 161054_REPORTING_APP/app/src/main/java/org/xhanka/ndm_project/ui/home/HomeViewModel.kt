@@ -23,8 +23,8 @@ class HomeViewModel @Inject constructor(dataBase: MainDataBase): ViewModel() {
     val userLastLKnownLocation: LiveData<UserLastLKnownLocation?> get() = _location
 
     // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
-    private var _userDeniedPermissions: MutableLiveData<Int> = MutableLiveData(0)
-    val userDeniedPermissions: LiveData<Int> get() = _userDeniedPermissions
+    private var _userDeniedPermissions: MutableLiveData<Boolean> = MutableLiveData(false)
+    val userDeniedPermissions: LiveData<Boolean> get() = _userDeniedPermissions
 
     init {
         getLastKnownLocation()
@@ -64,7 +64,9 @@ class HomeViewModel @Inject constructor(dataBase: MainDataBase): ViewModel() {
 
 
     // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
-    fun addCount() {
-        _userDeniedPermissions.postValue( userDeniedPermissions.value?.inc())
+    // USED TO CHECK IF USER HAS PERMANENTLY DENIED PERMISSIONS
+    // :) RARE CASE
+    fun updateLocationPermissionStatus() {
+        _userDeniedPermissions.postValue( true)
     }
 }
