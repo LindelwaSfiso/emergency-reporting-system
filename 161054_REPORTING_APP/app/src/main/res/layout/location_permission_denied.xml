@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/permissionDeniedContainer2">
+
+
+    <TextView
+        android:paddingHorizontal="10dp"
+        android:textSize="20sp"
+        android:textColor="#E44F4F"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/requestPermissionsButton"
+        android:gravity="center"
+        app:fontFamily="sans-serif-condensed-medium"
+        android:text="Location Permissions are required to access your current location.\n\nPlease grant special permissions to continue using our app"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:paddingVertical="15dp"
+        app:cornerRadius="15dp"
+        android:id="@+id/requestPermissionsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request Permissions" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

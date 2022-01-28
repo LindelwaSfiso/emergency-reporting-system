@@ -12,8 +12,19 @@
         android:title="@string/title_dashboard" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_emergency_contacts"
+        android:icon="@drawable/ic_emergency_contacts"
+        android:title="@string/title_emergency_contacts_short" />
+
+    <item
+        android:id="@+id/navigation_user_profile"
+        android:icon="@drawable/ic_user_profile"
+        android:title="@string/profile" />
 
 </menu>
+
+<!--
+When setting separate navGraph stacks
+1. In menu resource point to navGraph file,
+2. In MainActivity point to startDestination fragment
+-->

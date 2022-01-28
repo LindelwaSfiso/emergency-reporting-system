@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/authentication_navigation"
+    app:startDestination="@id/navigation_register_user">
+
+    <fragment
+        android:id="@+id/navigation_register_user"
+        tools:layout="@layout/fragment_register_user"
+        android:name="org.xhanka.ndm_project.registration.RegisterUserFragment"
+        android:label="Welcome!" >
+        <action
+            android:id="@+id/action_navigation_register_user_to_navigation_verify_phone_number"
+            app:destination="@id/navigation_verify_phone_number" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_verify_phone_number"
+        android:name="org.xhanka.ndm_project.registration.VerifyPhoneNumberFragment"
+        android:label="Verify Number">
+
+        <argument
+            app:argType="string"
+            android:name="userPhoneNumber"
+            app:nullable="false" />
+
+    </fragment>
+
+</navigation>

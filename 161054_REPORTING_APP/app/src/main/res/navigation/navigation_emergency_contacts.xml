@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_emergency_contacts"
+    app:startDestination="@id/navigation_contacts">
+
+    <fragment
+        android:id="@+id/navigation_contacts"
+        android:name="org.xhanka.ndm_project.ui.contacts.EmergencyContactsFragment"
+        android:label="@string/title_emergency_contacts"
+        tools:layout="@layout/fragment_emergency_contacts">
+        <action
+            android:id="@+id/action_emergency_contacts_to_nav_new_or_update"
+            app:destination="@id/navigation_new_or_update_contact"
+            app:launchSingleTop="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_new_or_update_contact"
+        android:name="org.xhanka.ndm_project.ui.contacts.NewOrUpdateContactFragment"
+        android:label="{label}">
+        <argument
+            app:argType="string"
+            android:name="label"
+            app:nullable="false"/>
+        <argument
+            android:name="emergencyContact"
+            app:nullable="true"
+            app:argType="org.xhanka.ndm_project.data.models.EmergencyContact"/>
+        <action
+            android:id="@+id/action_nav_new_or_update_to_emergency_contacts"
+            app:destination="@id/navigation_emergency_contacts"
+            app:popUpTo="@id/navigation_emergency_contacts"
+            app:popUpToInclusive="false"
+            app:popUpToSaveState="false" />
+
+    </fragment>
+
+</navigation>

@@ -1,58 +1,56 @@
 package org.xhanka.ndm_project.ui.home
+
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
+import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.material.snackbar.Snackbar
-import org.xhanka.ndm_project.R
+import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.FragmentHomeBinding
-import org.xhanka.ndm_project.ui.activities.MapsActivity
-import org.xhanka.ndm_project.utils.showSnackbar
-import java.text.DateFormat
+import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
+import org.xhanka.ndm_project.utils.Utils
+import java.text.SimpleDateFormat
 import java.util.*
 
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var mLocationCallback: LocationCallback
+    private lateinit var mLocationRequest: LocationRequest
+    private lateinit var mSettingsClient: SettingsClient
+    private lateinit var mLocationSettingsRequest: LocationSettingsRequest
 
-    private var mLocationCallback: LocationCallback? = null
-    private var mLocationRequest: LocationRequest? = null
 
+    private var mCurrentLocation: Location? = null
+    private var userHasDeniedPermissions: Boolean = false
 
     companion object {
+        // Update location every after 5 seconds :: Increase this value !!
+        // NOTE: the app only request for location updates when HomeFragment is on foreground
         private const val UPDATE_INTERVAL_IN_MILLI: Long = 5000
         private const val FASTEST_UPDATE_INTERVAL_IN_MILLI = UPDATE_INTERVAL_IN_MILLI / 2
-
     }
 
     private val homeViewModel by viewModels<HomeViewModel>()
-
-    /**
-     * The fastest rate for active location updates. Exact. Updates will never be more frequent
-     * than this value.
-     */
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,173 +58,196 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        return binding.root
     }
 
-    @SuppressLint("MissingPermission")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requestPermissions()
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity().application)
+        mFusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity().application)
+        mSettingsClient = LocationServices.getSettingsClient(requireContext())
 
         createLocationRequest()
         createLocationCallback()
+        buildLocationSettingsRequest()
 
-        fusedLocationClient.requestLocationUpdates(
-            mLocationRequest!!,
-            mLocationCallback!!,
-            Looper.getMainLooper()
-        )
-
-        getLastKnownLocation(requireActivity())
-
-        binding.launchMap.setOnClickListener {
-            startActivity(Intent(requireContext(), MapsActivity::class.java))
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun getLastKnownLocation(activity: Activity) {
-        fusedLocationClient.lastLocation.addOnCompleteListener(activity) { task ->
-            if (task.isSuccessful && task.result != null) {
-
-                val location = task.result
-
-                homeViewModel.updateLocation(String.format(
-                    "%s\n%s",
-                    resources.getString(R.string.latitude_label, location.latitude),
-                    resources.getString(R.string.longitude_label, location.longitude)
-                ))
-
-                val geocoder = Geocoder(requireContext())
-                try {
-                    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    val firstAddress = addresses[0]
-
-                    binding.textPlace.text = String.format(
-                        "%s\n%s\n%s\n%s",
-                        firstAddress.getAddressLine(0),
-                        firstAddress.countryName,
-                        firstAddress.featureName,
-                        firstAddress.adminArea
-                    )
-                }
-                catch (exception: Exception) {
-                    exception.printStackTrace()
-                }
-
-                Log.d(
-                    "TAG", resources
-                        .getString(R.string.latitude_label, task.result.latitude)
-                )
-
-                Log.d(
-                    "TAG", resources
-                        .getString(R.string.longitude_label, task.result.longitude)
-                )
-
-            } else {
-                task.exception?.stackTrace
-                Log.d("TAG", "getLastLocation:exception", task.exception)
+        homeViewModel.userDeniedPermissions.observe(this, {
+            if (it > 1) {
+                // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
+                userHasDeniedPermissions = true
             }
-        }
+        })
     }
 
 
     private fun createLocationRequest() {
         mLocationRequest = LocationRequest.create()
-        mLocationRequest!!.interval = UPDATE_INTERVAL_IN_MILLI
-        mLocationRequest!!.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLI
-        mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = UPDATE_INTERVAL_IN_MILLI
+        mLocationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLI
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
-    /**
-     * Creates a callback for receiving location events.
-     */
+    private fun buildLocationSettingsRequest() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(mLocationRequest)
+            .setAlwaysShow(true)
+        mLocationSettingsRequest = builder.build()
+    }
+
     private fun createLocationCallback() {
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
 
-                val location = locationResult.lastLocation
-
-                homeViewModel.updateLocation(String.format(
-                    "%s\n%s",
-                    resources.getString(R.string.latitude_label, location.latitude),
-                    resources.getString(R.string.longitude_label, location.longitude)
-                ))
-
-                /*mCurrentLocation=*/
-                Log.d("TAG", "Locations:\t" + locationResult.lastLocation)
-                /*mLastUpdateTime =*/
-                Log.d("LAST UPDATE TIME:\t", DateFormat.getTimeInstance().format(Date()))
+                mCurrentLocation = locationResult.lastLocation
+                updateUI()
+                // homeViewModel.getL(location)
+                Log.d(
+                    "TAG", "LATITUDE:\t${mCurrentLocation!!.latitude}, " +
+                            "LONGITUDE:\t${mCurrentLocation!!.longitude}"
+                )
             }
         }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        // Begin by checking if the device has the necessary location settings.
+
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+            .addOnSuccessListener(requireActivity()) {
+                Log.d("TAG", "All location settings are satisfied.")
+
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) {
+                    Log.d("TAG", "GETTING LAST KNOWN LOCATION FORM FUSED LOCATION")
+
+                    if (it.isSuccessful && it.result != null) {
+                        mCurrentLocation = it.result
+                        updateUI()
+                    }
+                }
+
+                mFusedLocationClient.requestLocationUpdates(
+                    mLocationRequest,
+                    mLocationCallback,
+                    Looper.getMainLooper()
+                )
+
+            }
+            .addOnFailureListener(requireActivity()) { e ->
+
+                when ((e as ApiException).statusCode) {
+
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
+                        Log.d(
+                            "TAG",
+                            "Location settings are not satisfied. Attempting to upgrade " +
+                                    "location settings "
+                        )
+                        try {
+                            // Show the dialog by calling startResolutionForResult(), and check the
+                            // result in onActivityResult().
+                            val rae = e as ResolvableApiException
+                            rae.startResolutionForResult(
+                                requireActivity(),
+                                REQUEST_LOCATION_PERMISSION_CODE
+                            )
+                        } catch (sie: SendIntentException) {
+                            Log.d("TAG", "PendingIntent unable to execute request.")
+                        }
+                    }
+
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+                        val errorMessage = "Location settings are inadequate, and cannot be " +
+                                "fixed here. Fix in Settings."
+
+                        Log.d("TAG", errorMessage)
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                }
+                showPermissionError()
+            }
+    }
+
+    private fun updateUI() {
+        binding.userLatitude.text = mCurrentLocation?.latitude.toString()
+        binding.userLongitude.text = mCurrentLocation?.longitude.toString()
+
+        mCurrentLocation?.let {
+
+            showLocationUpdates()
+
+            binding.accuracy2.text = String.format("${it.accuracy} m")
+            binding.lastUpdate2.text = SimpleDateFormat.getInstance().format(Date())
+            binding.altitude2.text = if(it.hasAccuracy()) String.format("${it.altitude} m") else "N/A"
+        } // consider showing errors if we can't get location
     }
 
     private fun requestPermissions() {
         Log.d("TAG", "CHECKING PERMISSIONS")
 
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                if (isGranted) {
-                    Log.i("Permission: ", "Granted")
-                } else {
-                    Log.i("Permission: ", "Denied")
-                }
-            }
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
+            requireActivity(),
+            ACCESS_FINE_LOCATION
+        )
 
+        // Provide an additional rationale to the user. This would happen if the user denied the
+        // request previously, but didn't check the "Don't ask again" checkbox.
+        when (shouldProvideRationale) {
+            true -> {
+                Log.d("TAG", "Displaying permission rationale to provide additional context.")
 
-        when {
-
-            // IF PERMISSIONS ALREADY GIVEN PROCEED
-            checkPermissions() -> {
-
-                Log.d("TAG", "PERMISSION GRANTED")
-
-                binding.snackBar.showSnackbar(
-                    "GRANTED",
-                    Snackbar.LENGTH_INDEFINITE,
-                    null
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
+                    REQUEST_LOCATION_PERMISSION_CODE
                 )
             }
 
-            // REQUEST PERMISSIONS
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                ACCESS_FINE_LOCATION
-            ) -> {
-
-                binding.snackBar.showSnackbar(
-                    "Permission is required",
-                    Snackbar.LENGTH_INDEFINITE, "Ok"
-                ) {
-                    requestPermissionLauncher.launch(
-                        ACCESS_FINE_LOCATION
-                    )
+            userHasDeniedPermissions -> {
+                // user has permanently denied location permission
+                showPermissionError()
+                binding.permissionDeniedContainer.requestPermissionsButton.setOnClickListener {
+                    Utils.requestPermissionsFromSettings(it.context)
                 }
             }
 
             else -> {
-                requestPermissionLauncher.launch(
-                    ACCESS_FINE_LOCATION
+                homeViewModel.addCount()
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
+                    REQUEST_LOCATION_PERMISSION_CODE
                 )
             }
         }
     }
 
-    private fun checkPermissions() =  ContextCompat.checkSelfPermission(
-        requireContext(),
-        ACCESS_FINE_LOCATION
-    ) == PERMISSION_GRANTED
+    private fun checkPermissions(): Boolean {
+        val permissionState = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            ACCESS_FINE_LOCATION
+        )
+        return permissionState == PERMISSION_GRANTED
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (mCurrentLocation == null)
+            // remove this consider using view model to store current location
+            // show loading animation while loading
+            showInitializing()
+
+        if (checkPermissions()) startLocationUpdates()
+        else requestPermissions()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseLocationUpdates()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -234,13 +255,29 @@ class HomeFragment : Fragment() {
     }
 
 
-    override fun onPause() {
-        super.onPause()
-        pauseLocationUpdates();
+    private fun pauseLocationUpdates() {
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
+        mLocationCallback.let { mFusedLocationClient.removeLocationUpdates(it) }
     }
 
-    private fun pauseLocationUpdates() {
-        mLocationCallback?.let { fusedLocationClient.removeLocationUpdates(it) }
+    private fun showInitializing() {
+        binding.displayContainer.visibility = View.GONE
+        binding.locationInitializingContainer.locationInitializingContainer2.visibility = View.VISIBLE
+        binding.permissionDeniedContainer.permissionDeniedContainer2.visibility = View.GONE
+    }
+
+    private fun showPermissionError() {
+        binding.displayContainer.visibility = View.GONE
+        binding.locationInitializingContainer.locationInitializingContainer2.visibility = View.GONE
+        binding.permissionDeniedContainer.permissionDeniedContainer2.visibility = View.VISIBLE
+    }
+
+    private fun showLocationUpdates() {
+        binding.displayContainer.visibility = View.VISIBLE
+        binding.locationInitializingContainer.locationInitializingContainer2.visibility = View.GONE
+        binding.permissionDeniedContainer.permissionDeniedContainer2.visibility = View.GONE
     }
 
 }

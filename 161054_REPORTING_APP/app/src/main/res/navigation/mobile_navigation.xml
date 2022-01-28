@@ -17,9 +17,12 @@
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
+    <include app:graph="@navigation/navigation_emergency_contacts" />
+
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="org.xhanka.ndm_project.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_user_profile"
+        android:name="org.xhanka.ndm_project.ui.settings.UserProfileFragment"
+        android:label="User Profile"
+        tools:layout="@layout/fragment_user_profile"/>
+
 </navigation>
