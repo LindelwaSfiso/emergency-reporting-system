@@ -11,62 +11,65 @@ import kotlinx.coroutines.launch
 import org.xhanka.ndm_project.data.database.MainDataBase
 import org.xhanka.ndm_project.data.models.UserLastLKnownLocation
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(dataBase: MainDataBase): ViewModel() {
+class HomeViewModel : ViewModel() {
 
-    private val locationDao = dataBase.userLastKnownLocationDao()
-    private var _location: MutableLiveData<UserLastLKnownLocation?> = MutableLiveData()
-    val userLastLKnownLocation: LiveData<UserLastLKnownLocation?> get() = _location
+    // save current location, avoid losing this when screen changes, or user goes to another screen
+    private var _currentLocation: MutableLiveData<Location> = MutableLiveData()
+    val currentLocation: LiveData<Location> get() = _currentLocation
 
-    // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
+    // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH, (FIX TO GOOGLE'S BROKEN CODE!!)
     private var _userDeniedPermissions: MutableLiveData<Boolean> = MutableLiveData(false)
     val userDeniedPermissions: LiveData<Boolean> get() = _userDeniedPermissions
-
-    init {
-        getLastKnownLocation()
-    }
-
-    fun updateUserLastKnownLocation(userLocation: UserLastLKnownLocation) = viewModelScope.launch {
-        locationDao.updateUserLastKnownLocation(userLocation)
-    }
-
-    private fun getLastKnownLocation() = viewModelScope.launch {
-        _location.postValue(locationDao.getLastKnownUserLocation())
-        Log.d("TAG", _location.value.toString())
-    }
-    
-    fun getL(location: Location) = viewModelScope.launch {
-        locationDao.getLastKnownUserLocation()?.let {
-            // If not null, update location
-            it.lastUpdateTime = DateFormat.getTimeInstance().format(Date())
-            it.userLatitude = location.latitude
-            it.userLongitude = location.longitude
-
-            locationDao.updateUserLastKnownLocation(it)
-
-            Log.d("TAG", "SAVED LOCATION:\t$it")
-        } ?: run {
-            // if last known location is null, create a new entry and save location
-            // this is likely to run when the app boot up for the first time
-            locationDao.saveLastKnownUserLocation(
-                UserLastLKnownLocation(
-                    location.latitude,
-                    location.longitude,
-                    DateFormat.getTimeInstance().format(Date())
-            ))
-        }
-
-    }
-
 
     // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
     // USED TO CHECK IF USER HAS PERMANENTLY DENIED PERMISSIONS
     // :) RARE CASE
     fun updateLocationPermissionStatus() {
-        _userDeniedPermissions.postValue( true)
+        _userDeniedPermissions.postValue(true)
     }
+
+
+    /**
+     * Update the current user location,
+     */
+    fun setCurrentLocation(location: Location) {
+        // update user interface with the newest location
+        _currentLocation.postValue(location)
+
+
+//        viewModelScope.launch {
+//            // save last known location to database via coroutines
+//            // --> the app tries to save the location with the best location accuracy
+//            val savedLocation = currentLocationDao.getLastKnownUserLocation()
+//            savedLocation?.let {
+//                // location is available, try to compare accuracy and save the best
+//                if (location.accuracy > it.locationAccuracy) {
+//
+//                    it.locationAccuracy = location.accuracy
+//                    it.lastUpdateTime = SimpleDateFormat(
+//                        "yy/MM -- HH:mm:ss", Locale.getDefault()
+//                    ).format(Date())
+//
+//                    currentLocationDao.updateUserLastKnownLocation(it)
+//                }
+//            } ?: run {
+//                // location is null (nothing saved yet??)
+//                // -> update location
+//
+//                currentLocationDao.saveLastKnownUserLocation(
+//                    UserLastLKnownLocation(
+//                        location.latitude, location.longitude, SimpleDateFormat(
+//                            "yy/MM -- HH:mm:ss", Locale.getDefault()
+//                        ).format(Date()), location.accuracy
+//                    )
+//                )
+//            }
+//        }
+    }
+
 }

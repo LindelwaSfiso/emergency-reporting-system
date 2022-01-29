@@ -16,8 +16,8 @@ interface UserLastKnownLocationDao {
     suspend fun saveLastKnownUserLocation(userLocation: UserLastLKnownLocation)
 
     @Update
-    suspend fun updateUserLastKnownLocation(userLocation: UserLastLKnownLocation?)
+    suspend fun updateUserLastKnownLocation(userLocation: UserLastLKnownLocation)
 
     @Delete
-    suspend fun deleteUserLastKnownLocation(userLocation: UserLastLKnownLocation?)
+    suspend fun deleteUserLastKnownLocation(userLocation: UserLastLKnownLocation)
 }

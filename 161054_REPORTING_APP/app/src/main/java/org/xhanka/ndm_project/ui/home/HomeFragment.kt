@@ -15,14 +15,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.FragmentHomeBinding
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
 import org.xhanka.ndm_project.utils.Utils
+import org.xhanka.ndm_project.utils.round
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,17 +43,16 @@ class HomeFragment : Fragment() {
     private lateinit var mLocationSettingsRequest: LocationSettingsRequest
 
 
-    private var mCurrentLocation: Location? = null
     private var userHasDeniedPermissions: Boolean = false
 
     companion object {
-        // Update location every after 5 seconds :: Increase this value !!
+        // Update location every after 10 seconds :: Increase this value !!
         // NOTE: the app only request for location updates when HomeFragment is on foreground
-        private const val UPDATE_INTERVAL_IN_MILLI: Long = 5000
+        private const val UPDATE_INTERVAL_IN_MILLI: Long = 10_000
         private const val FASTEST_UPDATE_INTERVAL_IN_MILLI = UPDATE_INTERVAL_IN_MILLI / 2
     }
 
-    private val homeViewModel by viewModels<HomeViewModel>()
+    private val homeViewModel by activityViewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,9 +78,27 @@ class HomeFragment : Fragment() {
         homeViewModel.userDeniedPermissions.observe(this, {
             Log.d("TAG", "COUNTING:\t$it")
 
-                // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
-                userHasDeniedPermissions = it
+            // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
+            userHasDeniedPermissions = it
 
+        })
+
+        homeViewModel.currentLocation.observe(this, {
+            showLocationUpdates()
+
+            // val results = FloatArray(5)
+            // Location.distanceBetween(it.latitude, it.longitude, -26.4857118,31.3090501, results)
+            // Log.d("TAG", "DISTANCE IS:\t${results[0]}")
+
+            binding.userLatitude.text = it.latitude.toString()
+            binding.userLongitude.text = it.longitude.toString()
+
+            binding.accuracy2.text = String.format("${it.accuracy} m")
+            binding.lastUpdate2.text = SimpleDateFormat(
+                "yy/MM -- HH:mm:ss", Locale.getDefault()
+            ).format(Date())
+            binding.altitude2.text = if (it.hasAccuracy()) String.format("${it.altitude.round()} m")
+            else "N/A"
         })
     }
 
@@ -102,12 +122,11 @@ class HomeFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
 
-                mCurrentLocation = locationResult.lastLocation
-                updateUI()
-                // homeViewModel.getL(location)
+                // update current location
+                homeViewModel.setCurrentLocation(locationResult.lastLocation)
                 Log.d(
-                    "TAG", "LATITUDE:\t${mCurrentLocation!!.latitude}, " +
-                            "LONGITUDE:\t${mCurrentLocation!!.longitude}"
+                    "TAG", "LATITUDE:\t${locationResult.lastLocation.latitude}, " +
+                            "LONGITUDE:\t${locationResult.lastLocation.longitude}"
                 )
             }
         }
@@ -122,16 +141,42 @@ class HomeFragment : Fragment() {
             .addOnSuccessListener(requireActivity()) {
                 Log.d("TAG", "All location settings are satisfied.")
 
+                // THIS GIVES THE BEST ACCURACY >> INVESTIGATE WHY
+                mFusedLocationClient.getCurrentLocation(
+                    LocationRequest.PRIORITY_HIGH_ACCURACY,
+                    object : CancellationToken() {
+                        override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
+                            Log.d("TAG", "ON CANCELED REQUESTED")
+                            return this
+                        }
+
+                        override fun isCancellationRequested(): Boolean {
+                            Log.d("TAG", "IS CANCELLATION REQUESTED")
+                            return true
+                        }
+
+                    })
+                    .addOnCompleteListener(requireActivity()) {
+
+                        Log.d("TAG", "CURRENT LOCATION +++++ \t" + it.result)
+
+                        if (it.isSuccessful && it.result != null)
+                        // update current location
+                            homeViewModel.setCurrentLocation(it.result)
+                    }
+
+                /*
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) {
                     Log.d("TAG", "GETTING LAST KNOWN LOCATION FORM FUSED LOCATION")
 
-                    // todo: last known location has a very low accuracy > 2.5Km !!
+                    // last known location has a very low accuracy > 2.5Km !!, now using current location
 
                     if (it.isSuccessful && it.result != null) {
                         mCurrentLocation = it.result
                         updateUI()
                     }
                 }
+                */
 
                 // register for location updates
                 mFusedLocationClient.requestLocationUpdates(
@@ -177,21 +222,6 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-    }
-
-    private fun updateUI() {
-        binding.userLatitude.text = mCurrentLocation?.latitude.toString()
-        binding.userLongitude.text = mCurrentLocation?.longitude.toString()
-
-        mCurrentLocation?.let {
-
-            showLocationUpdates()
-
-            binding.accuracy2.text = String.format("${it.accuracy} m")
-            binding.lastUpdate2.text = SimpleDateFormat.getInstance().format(Date())
-            binding.altitude2.text =
-                if (it.hasAccuracy()) String.format("${it.altitude} m") else "N/A"
-        } // consider showing errors if we can't get location
     }
 
     private fun requestPermissions() {
@@ -246,7 +276,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (mCurrentLocation == null)
+        if (homeViewModel.currentLocation.value == null)
         // remove this consider using view model to store current location
         // show loading animation while loading
             showInitializing()
@@ -274,6 +304,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun showInitializing() {
+//        val animation = AnimationUtils.loadAnimation(
+//            binding.displayContainer.context,
+//            R.anim.pulsing_animation
+//        )
+//        binding.locationInitializingContainer.pulseView.startAnimation(animation)
+
         binding.displayContainer.visibility = View.GONE
         binding.locationInitializingContainer.locationInitializingContainer2.visibility =
             View.VISIBLE
@@ -281,12 +317,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun showPermissionError() {
+        // binding.locationInitializingContainer.pulseView.clearAnimation()
         binding.displayContainer.visibility = View.GONE
         binding.locationInitializingContainer.locationInitializingContainer2.visibility = View.GONE
         binding.permissionDeniedContainer.permissionDeniedContainer2.visibility = View.VISIBLE
     }
 
     private fun showLocationUpdates() {
+        // binding.locationInitializingContainer.pulseView.clearAnimation()
         binding.displayContainer.visibility = View.VISIBLE
         binding.locationInitializingContainer.locationInitializingContainer2.visibility = View.GONE
         binding.permissionDeniedContainer.permissionDeniedContainer2.visibility = View.GONE

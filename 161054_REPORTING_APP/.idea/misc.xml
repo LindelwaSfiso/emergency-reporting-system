@@ -14,7 +14,10 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_import_contact.xml" value="0.21041666666666667" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_location.xml" value="0.10729166666666666" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.17083333333333334" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_pulse.xml" value="0.12552083333333333" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_pulse2.xml" value="0.25" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_settings.xml" value="0.27708333333333335" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_shape.xml" value="0.17083333333333334" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash.xml" value="0.33" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_sync.xml" value="0.27708333333333335" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_user_profile.xml" value="0.27282051282051284" />
@@ -27,6 +30,7 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_new_or_update_contact.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_register_user.xml" value="0.33" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_report_emergency.xml" value="0.1265625" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_user_profile.xml" value="0.17255434782608695" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_verify_phone_number.xml" value="0.1308876811594203" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/ic_user_profile.xml" value="0.17255434782608695" />
