@@ -16,8 +16,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        preference?.key?.let {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        preference.key.let {
             if (it == "userProfile") {
                 val action = SettingsFragmentDirections.actionNavigationSettingsToNavigationUserProfile()
                 findNavController().navigate(action)

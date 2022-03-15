@@ -1,19 +1,15 @@
 package org.xhanka.ndm_project.ui.contacts
 
-import android.database.Cursor
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
-import android.view.*
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.xhanka.ndm_project.R
 import org.xhanka.ndm_project.databinding.FragmentEmergencyContactsBinding
 
 @AndroidEntryPoint

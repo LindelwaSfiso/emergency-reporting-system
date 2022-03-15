@@ -25,6 +25,21 @@
             android:name="userPhoneNumber"
             app:nullable="false" />
 
+        <argument
+            app:argType="string"
+            android:name="storedVerificationId"
+            app:nullable="false" />
+
+        <argument
+            app:argType="string"
+            android:name="userFullName"
+            app:nullable="false" />
+
+        <argument
+            app:argType="string"
+            android:name="userId"
+            app:nullable="false" />
+
     </fragment>
 
 </navigation>

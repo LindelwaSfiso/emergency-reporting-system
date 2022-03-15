@@ -20,7 +20,29 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.161054_PROJECT.PopupOverlay"/>
+            app:popupTheme="@style/Theme.161054_PROJECT.PopupOverlay">
+
+            <TextView
+                android:id="@+id/weatherTemperature"
+                android:layout_gravity="end"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="20 \u2103"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/weatherIcon"
+                android:contentDescription="@string/app_name"
+                android:layout_gravity="end"
+                android:scaleType="fitXY"
+                android:padding="13dp"
+                android:src="@drawable/ic_weather"
+                android:layout_width="56dp"
+                android:layout_height="56dp"/>
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

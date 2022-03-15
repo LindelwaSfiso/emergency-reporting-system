@@ -3,13 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_home_main">
 
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="org.xhanka.ndm_project.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+    <include app:graph="@navigation/navigation_home_main" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -20,5 +16,7 @@
     <include app:graph="@navigation/navigation_emergency_contacts" />
 
     <include app:graph="@navigation/navigation_settings" />
+
+    <include app:graph="@navigation/navigation_weather" />
 
 </navigation>

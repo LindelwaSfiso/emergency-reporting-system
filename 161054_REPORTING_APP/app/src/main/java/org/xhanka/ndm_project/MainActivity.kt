@@ -5,19 +5,22 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.ActivityMainBinding
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
@@ -26,8 +29,8 @@ import org.xhanka.ndm_project.utils.Utils
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private var _binding: ActivityMainBinding ?= null
-    private val binding get()= _binding!!
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -53,24 +56,23 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
 
-    private fun handleFirebase() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_weather_for_eswatini, R.id.navigation_weather_forecast, R.id.navigation_settings -> {
+                    // hide weather icon & temperature whe navigating to weather fragments and
+                    // settings fragment
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.d("TAG", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
+                    binding.weatherTemperature.visibility = View.GONE
+                    binding.weatherIcon.visibility = View.GONE
+                }
+
+                else -> {
+                    binding.weatherTemperature.visibility = View.VISIBLE
+                    binding.weatherIcon.visibility = View.VISIBLE
+                }
             }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = "Registration $token"
-            Log.d("TAG", msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -125,6 +127,35 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         }
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        setUpWeatherToolBar(menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun setUpWeatherToolBar(menu: Menu?) {
+        // make internet connection for weather and update user interface
+        // if that fails don't display anything, try again later
+        menu?.get(0)?.title = "20\u2121"
+
+        binding.weatherIcon.setOnClickListener {
+            navController.navigate(R.id.navigation_weather)
+        }
+
+        binding.weatherTemperature.setOnClickListener {
+            navController.navigate(R.id.navigation_weather)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.logoutUser) {
+            Firebase.auth.signOut()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

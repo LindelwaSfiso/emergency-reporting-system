@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_weather"
+    app:startDestination="@id/navigation_weather_for_eswatini">
+
+    <fragment
+        android:id="@+id/navigation_weather_for_eswatini"
+        android:name="org.xhanka.ndm_project.ui.weather.WeatherFragment"
+        android:label="Major Town's Weather"
+        tools:layout="@layout/fragment_weather">
+        <action
+            android:id="@+id/action_navigation_weather_for_eswatini_to_navigation_weather_forecast"
+            app:destination="@id/navigation_weather_forecast" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_weather_forecast"
+        android:name="org.xhanka.ndm_project.ui.weather.WeatherForecastFragment"
+        tools:layout="@layout/fragment_weather_forecast"
+        android:label="{townName}">
+
+        <argument
+            android:name="townName"
+            app:argType="string"
+            app:nullable="false" />
+
+    </fragment>
+
+</navigation>

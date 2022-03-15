@@ -7,8 +7,8 @@ package org.xhanka.ndm_project.utils
  * @author Dlamini Lindelwa Sifiso
  */
 
-enum class EmergencyType {
-    MEDICAL,
-    FIRE,
-    POLICE
+enum class EmergencyType(var value: String) {
+    MEDICAL("MEDICAL"),
+    FIRE( "FIRE"),
+    POLICE("POLICE")
 }

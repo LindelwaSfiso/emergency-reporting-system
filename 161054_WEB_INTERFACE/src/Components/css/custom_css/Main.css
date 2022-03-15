@@ -1,0 +1,9 @@
+
+@media (max-width: 570px) {
+
+    ::after .welcome-text {
+        font-size: xx-large;
+        color: red;
+    }
+
+}

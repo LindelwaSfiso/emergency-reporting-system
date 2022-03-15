@@ -10,7 +10,30 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import org.xhanka.ndm_project.R
 import org.xhanka.ndm_project.databinding.ActivityAuthenticationBinding
 
-
+/**
+ * @author Dlamini Lindelwa [31/01/22]
+ *
+ * Authentication activity
+ * +++++++++++++++++++++++
+ *
+ * Sub Fragments
+ *      -- RegisterUserFragment.kt [get user phone number for verification]
+ *      -- VerifyPhoneNumberFragment.kt [prompt user to enter verification code]
+ *      --
+ *
+ * Logic Flow
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *      -- prompt user to enter phone number
+ *      -- verify number and send verification code
+ *      -- prompt user to sign enter verification code
+ *
+ *      -- check if isNewUser
+ *          -- if new
+ *              -- prompt user to setup their profile
+ *                  -- fullName, id, and phoneNumber
+ *          -- if user already exits, log user in and redirect to MainActivity.kt
+ *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
 class AuthActivity: AppCompatActivity() {
 
     private var _binding: ActivityAuthenticationBinding ?= null

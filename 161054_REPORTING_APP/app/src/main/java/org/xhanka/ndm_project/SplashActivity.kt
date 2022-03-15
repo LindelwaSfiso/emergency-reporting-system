@@ -13,13 +13,22 @@ class SplashActivity : AppCompatActivity() {
 		installSplashScreen()
 		super.onCreate(savedInstanceState)
 
-		// TODO: CHECK IF USER IS LOGGED IN,
-		// -> IF NOT REDIRECT TO LOGIN SCREEN,
-		// -> ELSE MOVE TO MAIN_ACTIVITY
-
 		// -> TODO: SETUP DARK MODE HERE, IF ENABLED
 
 		startActivity(Intent(this, MainActivity::class.java))
 		finish()
+
+//		Firebase.auth.currentUser?.let {
+//			// if not null, user has signed in --> redirect to mainActivity
+//			startActivity(Intent(this, MainActivity::class.java))
+//			finish()
+//		} ?: run {
+//			 // else redirect user to registrationActivity
+//			startActivity(Intent(this, AuthActivity::class.java))
+//			finish()
+//		}
+
+//		startActivity(Intent(this, MainActivity::class.java))
+//		finish()
 	}
 }

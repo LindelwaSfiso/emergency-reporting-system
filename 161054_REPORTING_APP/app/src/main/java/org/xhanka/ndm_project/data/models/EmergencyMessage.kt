@@ -7,7 +7,14 @@ data class EmergencyMessage(
     var typeOfEmergency: EmergencyType,
     var localEmergencyStation: String,
     var user: User
-)
+) {
+    fun toHash() {
+        // todo
+        val messageHash = HashMap<String, String>(4)
+        messageHash["location"] = location
+        messageHash["typeOfEmergency"] = typeOfEmergency.value
+    }
+}
 
 
 // LOCATION : comma separated (19.19199, 199191)

@@ -5,7 +5,6 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -16,6 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -29,6 +29,23 @@ import org.xhanka.ndm_project.utils.round
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+/**
+ * @author Dlamini Lindelwa
+ *
+ * Home Fragment
+ * -------------------------------------------------------------------------------------------------
+ *
+ * This is main entry point to the application
+ *
+ * -- Requests user to grant permissions
+ * -- Retrieves the current location using Google's FusedLocation Api
+ *      -- Fused Location Api combines GPS, Mobile Data and WiFi to find user's location
+ *
+ * -- Contains a link to report an emergency
+ *
+ * -------------------------------------------------------------------------------------------------
+ */
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -76,12 +93,15 @@ class HomeFragment : Fragment() {
         buildLocationSettingsRequest()
 
         homeViewModel.userDeniedPermissions.observe(this, {
-            Log.d("TAG", "COUNTING:\t$it")
-
             // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
             userHasDeniedPermissions = it
 
         })
+
+        binding.reportButton.setOnClickListener {
+            val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportEmergency()
+            findNavController().navigate(action)
+        }
 
         homeViewModel.currentLocation.observe(this, {
             showLocationUpdates()

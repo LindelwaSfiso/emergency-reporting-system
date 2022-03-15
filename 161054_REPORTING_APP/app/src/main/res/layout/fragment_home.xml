@@ -132,7 +132,7 @@
             android:layout_marginTop="30dp"
             android:backgroundTint="#F6F5F8"
             app:cardCornerRadius="20dp"
-            app:layout_constraintBottom_toTopOf="@id/alertButton"
+            app:layout_constraintBottom_toTopOf="@id/reportButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card1">
@@ -226,14 +226,14 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/alertButton"
+            android:id="@+id/reportButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="5dp"
             android:backgroundTint="#FF0000"
             android:paddingVertical="20dp"
-            android:text="REPORT EMERGENCY"
+            android:text="@string/report_emergency"
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

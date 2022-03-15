@@ -7,6 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.xhanka.ndm_project.data.api.WeatherApiSource
+import org.xhanka.ndm_project.data.api.WeatherApiService
 import org.xhanka.ndm_project.data.database.MainDataBase
 import javax.inject.Singleton
 
@@ -32,5 +34,14 @@ object AppModule {
 
         // .fallbackToDestructiveMigration() means
         // wipe and rebuild instead of migrating if no Migration object.
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideNewsApiService(
+        apiClientSource: WeatherApiSource,
+    ): WeatherApiService {
+        return apiClientSource.getNewsApiService()
     }
 }

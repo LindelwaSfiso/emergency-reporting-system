@@ -1,19 +1,9 @@
 package org.xhanka.ndm_project.ui.home
 
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import org.xhanka.ndm_project.data.database.MainDataBase
-import org.xhanka.ndm_project.data.models.UserLastLKnownLocation
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
-import javax.inject.Inject
 
 
 class HomeViewModel : ViewModel() {
