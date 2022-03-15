@@ -1,0 +1,15 @@
+.mdc-top-app-bar__section .mdc-icon-button {
+    padding: initial;
+}
+
+
+.header-logo {
+    width: 157pt;
+    pointer-events: none;
+    color: #ffff00
+}
+
+
+.brandName {
+    flex-grow: 1;
+}
