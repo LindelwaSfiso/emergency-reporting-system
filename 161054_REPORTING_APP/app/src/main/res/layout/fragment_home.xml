@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#F6F5F8"
+            android:backgroundTint="@color/colorCard"
 
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="30dp"
-            android:backgroundTint="#F6F5F8"
+            android:backgroundTint="@color/colorCard"
             app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toTopOf="@id/reportButton"
             app:layout_constraintEnd_toEndOf="parent"

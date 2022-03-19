@@ -42,21 +42,22 @@ class ReportEmergencyFragment : Fragment() {
 
         speak()
 
-        homeViewModel.currentLocation.observe(this, {
+        homeViewModel.currentLocation.observe(viewLifecycleOwner) {
             binding.displayLocation.text =
                 String.format("Latitude:\t%f\nLongitude \u2103:\t%f", it.latitude, it.longitude)
-        })
+        }
 
-        reportEmergencyViewModel.countDown.observe(this, {
+        reportEmergencyViewModel.countDown.observe(viewLifecycleOwner) {
             binding.countDown.text = it.toString()
-        })
+        }
 
         binding.progressBar.isIndeterminate = false
         binding.progressBar.max = ReportEmergencyViewModel.TOTAL_TIME_SEC
 
-        reportEmergencyViewModel.countDown.observe(this, {
+        reportEmergencyViewModel.countDown.observe(viewLifecycleOwner) {
             binding.progressBar.progress = it
-        })
+        }
+
         reportEmergencyViewModel.startCounter()
     }
 

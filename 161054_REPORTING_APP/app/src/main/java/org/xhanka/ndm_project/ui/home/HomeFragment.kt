@@ -92,18 +92,18 @@ class HomeFragment : Fragment() {
         createLocationCallback()
         buildLocationSettingsRequest()
 
-        homeViewModel.userDeniedPermissions.observe(this, {
+        homeViewModel.userDeniedPermissions.observe(viewLifecycleOwner) {
             // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
             userHasDeniedPermissions = it
 
-        })
+        }
 
         binding.reportButton.setOnClickListener {
             val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportEmergency()
             findNavController().navigate(action)
         }
 
-        homeViewModel.currentLocation.observe(this, {
+        homeViewModel.currentLocation.observe(viewLifecycleOwner) {
             showLocationUpdates()
 
             // val results = FloatArray(5)
@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
             ).format(Date())
             binding.altitude2.text = if (it.hasAccuracy()) String.format("${it.altitude.round()} m")
             else "N/A"
-        })
+        }
     }
 
 
@@ -162,7 +162,7 @@ class HomeFragment : Fragment() {
                 Log.d("TAG", "All location settings are satisfied.")
 
                 // THIS GIVES THE BEST ACCURACY >> INVESTIGATE WHY
-                mFusedLocationClient.getCurrentLocation(
+               /* mFusedLocationClient.getCurrentLocation(
                     LocationRequest.PRIORITY_HIGH_ACCURACY,
                     object : CancellationToken() {
                         override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
@@ -183,20 +183,19 @@ class HomeFragment : Fragment() {
                         if (it.isSuccessful && it.result != null)
                         // update current location
                             homeViewModel.setCurrentLocation(it.result)
-                    }
+                    }*/
 
-                /*
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) {
                     Log.d("TAG", "GETTING LAST KNOWN LOCATION FORM FUSED LOCATION")
 
                     // last known location has a very low accuracy > 2.5Km !!, now using current location
+                    // current location, takes >2min to load, investigate
 
-                    if (it.isSuccessful && it.result != null) {
-                        mCurrentLocation = it.result
-                        updateUI()
-                    }
+                    Log.d("TAG", "CURRENT LOCATION +++++ \t" + it.result)
+
+                    if (it.isSuccessful && it.result != null) // update current location
+                        homeViewModel.setCurrentLocation(it.result)
                 }
-                */
 
                 // register for location updates
                 mFusedLocationClient.requestLocationUpdates(

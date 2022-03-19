@@ -8,7 +8,7 @@
         android:translateX="27.54"
         android:translateY="27.54">
 
-        <path android:fillColor="#D5F1E1"
+        <path android:fillColor="@color/splashBackground"
             android:pathData="M-20,-20h108v108h-108v-108z"/>
 
         <group android:scaleX="0.12"
