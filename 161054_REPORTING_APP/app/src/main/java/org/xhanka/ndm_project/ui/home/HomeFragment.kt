@@ -3,8 +3,10 @@ package org.xhanka.ndm_project.ui.home
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -15,6 +17,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
@@ -23,6 +26,7 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.FragmentHomeBinding
+import org.xhanka.ndm_project.ui.report_emergency.ReportActivity
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
 import org.xhanka.ndm_project.utils.Utils
 import org.xhanka.ndm_project.utils.round
@@ -70,6 +74,7 @@ class HomeFragment : Fragment() {
     }
 
     private val homeViewModel by activityViewModels<HomeViewModel>()
+    private var victimLocation: Location? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,12 +104,15 @@ class HomeFragment : Fragment() {
         }
 
         binding.reportButton.setOnClickListener {
-            val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportEmergency()
+            val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportActivity(
+                victimLocation
+            )
             findNavController().navigate(action)
         }
 
         homeViewModel.currentLocation.observe(viewLifecycleOwner) {
             showLocationUpdates()
+            victimLocation = it
 
             // val results = FloatArray(5)
             // Location.distanceBetween(it.latitude, it.longitude, -26.4857118,31.3090501, results)

@@ -40,7 +40,7 @@ class EmergencyContactsFragment : Fragment() {
 
         val adapter = EmergencyContactsAdapter(emergencyContactViewModel, navController)
 
-        emergencyContactViewModel.emergencyContacts.observe(this, {
+        emergencyContactViewModel.emergencyContacts.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.recyclerView.visibility = View.GONE
                 binding.emptyView.visibility = View.VISIBLE
@@ -50,7 +50,7 @@ class EmergencyContactsFragment : Fragment() {
 
                 adapter.submitList(it)
             }
-        })
+        }
 
         binding.recyclerView.adapter = adapter
 

@@ -5,4 +5,8 @@
         android:title="Logout"
         android:icon="@drawable/ic_sync"
         android:id="@+id/logoutUser"/>
+
+    <item
+        android:title="@string/view_in_map"
+        android:id="@+id/viewInMaps"/>
 </menu>

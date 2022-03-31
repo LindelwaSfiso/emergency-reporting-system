@@ -2,15 +2,15 @@ package org.xhanka.ndm_project.ui.report_emergency
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.FragmentReportEmergencyBinding
-import org.xhanka.ndm_project.ui.home.HomeViewModel
 import java.util.*
 
 @AndroidEntryPoint
@@ -19,8 +19,8 @@ class ReportEmergencyFragment : Fragment() {
     private var _binding: FragmentReportEmergencyBinding? = null
     private val binding get() = _binding!!
 
-    private val homeViewModel by activityViewModels<HomeViewModel>()
     private val reportEmergencyViewModel by viewModels<ReportEmergencyViewModel>()
+    val args by navArgs<ReportEmergencyFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,15 +36,18 @@ class ReportEmergencyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         textToSpeech = TextToSpeech(view.context) {
+            Log.d("TAG", "INIT TEXT TO SPEECH ENGINE:\t$it")
+
             if (it != TextToSpeech.ERROR)
                 textToSpeech.language = Locale.getDefault()
+            if(it == TextToSpeech.SUCCESS)
+                speak()
         }
 
-        speak()
-
-        homeViewModel.currentLocation.observe(viewLifecycleOwner) {
-            binding.displayLocation.text =
-                String.format("Latitude:\t%f\nLongitude \u2103:\t%f", it.latitude, it.longitude)
+        // Log.d("TAG", args.victimLocation.toString())
+        args.victimLocation?.let {
+            binding.displayLocation.text = // ℃
+                String.format("Latitude:\t%f \nLongitude:\t %f", it.latitude, it.longitude)
         }
 
         reportEmergencyViewModel.countDown.observe(viewLifecycleOwner) {

@@ -37,4 +37,5 @@
     <string name="report_emergency">REPORT EMERGENCY</string>
     <string name="try_again">Try Again</string>
     <string name="no_connection">No connection</string>
+    <string name="view_in_map">View in Map</string>
 </resources>

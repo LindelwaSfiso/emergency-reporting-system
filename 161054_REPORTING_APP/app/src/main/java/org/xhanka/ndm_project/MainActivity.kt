@@ -2,7 +2,10 @@ package org.xhanka.ndm_project
 
 import android.Manifest
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,7 +14,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.get
+import androidx.activity.viewModels
+import androidx.core.net.UriCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,6 +27,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.ActivityMainBinding
+import org.xhanka.ndm_project.ui.home.HomeViewModel
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
 import org.xhanka.ndm_project.utils.Utils
 
@@ -34,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val homeViewModel by viewModels<HomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +66,12 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_weather_for_eswatini, R.id.navigation_weather_forecast, R.id.navigation_settings -> {
+                R.id.navigation_weather_for_eswatini,
+                R.id.navigation_weather_forecast,
+                R.id.navigation_contacts,
+                R.id.navigation_new_or_update_contact,
+                R.id.navigation_settings_screen,
+                R.id.navigation_user_profile -> {
                     // hide weather icon & temperature whe navigating to weather fragments and
                     // settings fragment
 
@@ -139,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     private fun setUpWeatherToolBar(menu: Menu?) {
         // make internet connection for weather and update user interface
         // if that fails don't display anything, try again later
-        menu?.get(0)?.title = "20\u2121"
+        // menu?.get(0)?.title = "20\u2121"
 
         binding.weatherIcon.setOnClickListener {
             navController.navigate(R.id.navigation_weather)
@@ -154,6 +166,12 @@ class MainActivity : AppCompatActivity() {
         if (item.itemId == R.id.logoutUser) {
             Firebase.auth.signOut()
             return true
+        } else if (item.itemId == R.id.viewInMaps){
+            homeViewModel.currentLocation.value?.let {
+                startActivity(Intent(ACTION_VIEW, Uri.parse(
+                    "geo:0,0?q=" + it.latitude +"," + it.longitude))
+                )
+            }
         }
         return super.onOptionsItemSelected(item)
     }

@@ -1,5 +1,6 @@
 package org.xhanka.ndm_project.ui.contacts
 
+import android.content.ContentResolver
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -7,10 +8,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -30,7 +28,7 @@ class NewOrUpdateContactFragment : Fragment() {
     private val args by navArgs<NewOrUpdateContactFragmentArgs>()
     private val emergencyContactViewModel by activityViewModels<EmergencyContactsViewModel>()
 
-    //var a: ActivityResultLauncher<Void>? =null
+    var a: ActivityResultLauncher<Void>? = null
 
     private lateinit var navController: NavController
 
@@ -51,6 +49,8 @@ class NewOrUpdateContactFragment : Fragment() {
         args.emergencyContact?.let {
 
             // if contact is not null, update emergency contact
+            setMenuVisibility(false) // todo: investigate this, remove main options menu
+            setHasOptionsMenu(false)
             updateEmergencyContact(it)
 
         } ?: run {
@@ -60,6 +60,7 @@ class NewOrUpdateContactFragment : Fragment() {
 
             // allow user to import contact
             setHasOptionsMenu(true)
+            setUpPickContactLauncher(activity?.contentResolver)
         }
 
     }
@@ -105,22 +106,21 @@ class NewOrUpdateContactFragment : Fragment() {
     }
 
 
-    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.d("TAG", "ON CREATE MENU")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.menu_add_contacts, menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }*/
+    }
 
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_import_contact) {
             a?.launch(null)
         }
         return super.onOptionsItemSelected(item)
-    }*/
+    }
 
-    /*private fun setUpPickContactLauncher() {
-       a = registerForActivityResult(ActivityResultContracts.PickContact()) { uri ->
+    private fun setUpPickContactLauncher(contentResolver: ContentResolver?) {
+        a = registerForActivityResult(ActivityResultContracts.PickContact()) { uri ->
             Log.d("TAG", uri.userInfo.toString())
 
             val cursor: Cursor? = requireActivity().contentResolver.query(
@@ -133,23 +133,48 @@ class NewOrUpdateContactFragment : Fragment() {
                 it.moveToFirst()
 
                 try {
+                    val contactId =
+                        it.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
+                    val contactDisplayName =
+                        it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
+                    val hasPhoneNumber =
+                        it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER)).toInt() == 1
+                    var contactNumber : String? = null
 
-                    val displayNameIndex =
-                        cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME)
-                    val phoneNumberIndex =
-                        cursor.getColumnIndexOrThrow("contact_status")
+                    if (hasPhoneNumber) {
+                        contentResolver?.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = $contactId",
+                            null,
+                            null
+                        ) ?.let {
+                            it.moveToFirst()
 
-                    Log.d("TAG", "DISPLAY NAME" + cursor.getString(displayNameIndex))
-                    Log.d("TAG", "PHONE NUMBER:\t" + cursor.getString(phoneNumberIndex))
+                            contactNumber =
+                                it.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                            it.close()
+                        } ?: run {
+                            it.close()
+                        }
+                    }
+
+                    binding.contactFullName.setText(contactDisplayName)
+                    binding.contactPhoneNumber.setText(contactNumber)
 
                 } catch (error: IllegalArgumentException) {
                     error.printStackTrace()
-                    Toast.makeText(requireContext(), "An error occurred while trying to import contact", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "An error occurred while trying to import contact",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             cursor?.close()
         }
-    }*/
+    }
 
 }

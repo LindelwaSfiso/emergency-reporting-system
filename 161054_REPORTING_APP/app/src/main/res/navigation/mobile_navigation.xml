@@ -3,9 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home_main">
+    app:startDestination="@+id/navigation_home">
 
-    <include app:graph="@navigation/navigation_home_main" />
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="org.xhanka.ndm_project.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_report_activity"
+            app:destination="@id/navigation_report_activity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -18,5 +26,15 @@
     <include app:graph="@navigation/navigation_settings" />
 
     <include app:graph="@navigation/navigation_weather" />
+
+    <activity
+        android:id="@+id/navigation_report_activity"
+        android:name="org.xhanka.ndm_project.ui.report_emergency.ReportActivity"
+        tools:layout="@layout/activity_report">
+        <argument
+            android:name="victimLocation"
+            app:argType="android.location.Location"
+            app:nullable="true" />
+    </activity>
 
 </navigation>
