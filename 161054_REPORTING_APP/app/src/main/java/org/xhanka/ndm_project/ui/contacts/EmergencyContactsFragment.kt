@@ -48,7 +48,9 @@ class EmergencyContactsFragment : Fragment() {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.emptyView.visibility = View.GONE
 
-                adapter.submitList(it)
+                val sorted = it.sortedBy { contact -> contact.contactFullName }
+                // todo: remove
+                adapter.submitList(sorted)
             }
         }
 

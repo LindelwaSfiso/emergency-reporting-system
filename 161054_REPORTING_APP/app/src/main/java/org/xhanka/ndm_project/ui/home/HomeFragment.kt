@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.FragmentHomeBinding
 import org.xhanka.ndm_project.ui.report_emergency.ReportActivity
+import org.xhanka.ndm_project.ui.report_emergency.VoskActivity
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
 import org.xhanka.ndm_project.utils.Utils
 import org.xhanka.ndm_project.utils.round
@@ -104,10 +105,11 @@ class HomeFragment : Fragment() {
         }
 
         binding.reportButton.setOnClickListener {
-            val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportActivity(
+            /*val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportActivity(
                 victimLocation
             )
-            findNavController().navigate(action)
+            findNavController().navigate(action)*/
+            startActivity(Intent(this.context, VoskActivity::class.java))
         }
 
         homeViewModel.currentLocation.observe(viewLifecycleOwner) {
@@ -170,7 +172,7 @@ class HomeFragment : Fragment() {
                 Log.d("TAG", "All location settings are satisfied.")
 
                 // THIS GIVES THE BEST ACCURACY >> INVESTIGATE WHY
-               /* mFusedLocationClient.getCurrentLocation(
+                mFusedLocationClient.getCurrentLocation(
                     LocationRequest.PRIORITY_HIGH_ACCURACY,
                     object : CancellationToken() {
                         override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
@@ -191,7 +193,7 @@ class HomeFragment : Fragment() {
                         if (it.isSuccessful && it.result != null)
                         // update current location
                             homeViewModel.setCurrentLocation(it.result)
-                    }*/
+                    }
 
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) {
                     Log.d("TAG", "GETTING LAST KNOWN LOCATION FORM FUSED LOCATION")

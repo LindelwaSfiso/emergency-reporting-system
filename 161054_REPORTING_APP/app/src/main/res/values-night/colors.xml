@@ -4,4 +4,6 @@
 
     <color name="colorCard">#303030</color>
     <color name="splashBackground">#5E615F</color>
+
+    <color name="settings_icon">#FFFFFF</color>
 </resources>

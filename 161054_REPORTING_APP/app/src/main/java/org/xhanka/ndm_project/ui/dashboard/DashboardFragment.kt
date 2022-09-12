@@ -5,20 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
-import org.xhanka.ndm_project.data.models.User
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.database.FirebaseRecyclerAdapter
 import org.xhanka.ndm_project.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private val dashboardViewModel by activityViewModels<DashboardViewModel>()
     private var _binding: FragmentDashboardBinding? = null
+    //private lateinit var adapter: FirebaseRecyclerAdapter<RandomData, DashboardViewModel.ViewHolder>
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -29,64 +27,65 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dashboardViewModel =
-            ViewModelProvider(this)[DashboardViewModel::class.java]
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        //adapter = dashboardViewModel.getRecyclerViewAdapter()
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val currentUser = Firebase.auth.currentUser!!
+        binding.addData.setOnClickListener {
+            val text = binding.editText.text.toString()
+            dashboardViewModel.sentences(it.context, text)
+        }
 
-//        val dataBase = FirebaseDatabase.getInstance()
-//        dataBase.setLogLevel(Logger.Level.DEBUG)
+        binding.tapAndHold.setOnButtonClickListener(object: TapHoldUpButton.OnButtonClickListener {
+            override fun onLongHoldStart(v: View?) {
+                Log.d("TAG", "ON LONG HOLD START")
+            }
 
-//        val users = dataBase.reference.child("USERS")
-//
-//        users.get().addOnCompleteListener {
-//            if (it.isSuccessful) {
-//
-//               for (count in it.result.children) {
-//                   Log.d("TAG", count.toString())
-//               }
-//                Log.d("TAG", it.result.toString())
-//
-//            } else {
-//                Log.d("TAG", "NOT SUCCESSFUL")
-//            }
-//        }
+            override fun onLongHoldEnd(v: View?) {
+                Log.d("TAG", "ON LONG HOLD END")
+            }
 
-//        val languages = dataBase.reference.child("Languages")
-//        languages.push().child("name").setValue("Java")
-//        languages.push().child("name").setValue("Kotlin")
-//        languages.push().child("name").setValue("Swift")
+            override fun onClick(v: View?) {
+                Log.d("TAG", "ON CLICK")
+            }
 
+        })
 
-//        languages.addValueEventListener(object: ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                snapshot.children.forEach {
-//                    Log.d("TAG", it.value.toString())
-//                }
-//
-//                dashboardViewModel.setTex(snapshot.toString())
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                dashboardViewModel.setTex(error.details.toString())
-//            }
-//
-//        })
+        /*binding.recyclerView.layoutManager = LinearLayoutManager(view.context)
 
+        dashboardViewModel.randomData.observe(viewLifecycleOwner) {
+            Log.d("TAG", it.toString())
+        }
+
+        binding.addData.setOnClickListener {
+            dashboardViewModel.addData()
+        }
+
+        binding.removeData.setOnClickListener {
+            dashboardViewModel.removeData()
+        }
+
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(DividerItemDecoration(
+            view.context, DividerItemDecoration.VERTICAL)
+        )*/
     }
+
+    override fun onStart() {
+        super.onStart()
+        //adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //adapter.stopListening()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

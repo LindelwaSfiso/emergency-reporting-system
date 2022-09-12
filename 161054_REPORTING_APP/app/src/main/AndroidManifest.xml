@@ -5,8 +5,15 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
+    <queries>
+        <!-- To use google speech recognition feature -->
+        <package android:name="com.google.android.googlequicksearchbox" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -26,7 +33,7 @@
             android:theme="@style/Theme.161054_PROJECT.NoActionBar" />
 
         <activity
-            android:name="org.xhanka.ndm_project.registration.AuthActivity"
+            android:name="org.xhanka.ndm_project.ui.registration.AuthActivity"
             android:theme="@style/Theme.161054_PROJECT.NoActionBar" />
 
         <activity
@@ -47,6 +54,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".ui.report_emergency.VoskActivity"/>
 
     </application>
 

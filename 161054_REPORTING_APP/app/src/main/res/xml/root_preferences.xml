@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--<PreferenceCategory app:title="@string/messages_header">
 
@@ -41,6 +42,16 @@
             app:key="syncContacts"
             app:title="Sync emergency contacts"
             app:summary="Sync emergency contacts with remote database periodically"/>
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
+            app:icon="@drawable/ic_settings_theme"
+            app:key="dark_mode"
+            app:title="Theme"
+            app:useSimpleSummaryProvider="true"
+            app:summary="Toggle dark mode." />
 
     </PreferenceCategory>
 

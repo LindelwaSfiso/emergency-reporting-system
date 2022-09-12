@@ -144,11 +144,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        setUpWeatherToolBar(menu)
+        setUpWeatherToolBar()
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun setUpWeatherToolBar(menu: Menu?) {
+    private fun setUpWeatherToolBar() {
         // make internet connection for weather and update user interface
         // if that fails don't display anything, try again later
         // menu?.get(0)?.title = "20\u2121"
