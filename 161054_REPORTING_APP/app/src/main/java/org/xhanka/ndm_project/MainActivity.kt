@@ -11,11 +11,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.activity.viewModels
-import androidx.core.net.UriCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,8 +22,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.ActivityMainBinding
 import org.xhanka.ndm_project.ui.home.HomeViewModel
@@ -66,22 +63,23 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_weather_for_eswatini,
-                R.id.navigation_weather_forecast,
-                R.id.navigation_contacts,
-                R.id.navigation_new_or_update_contact,
-                R.id.navigation_settings_screen,
-                R.id.navigation_user_profile -> {
-                    // hide weather icon & temperature whe navigating to weather fragments and
-                    // settings fragment
-
+                R.id.navigation_home, R.id.navigation_dashboard -> {
+                    // show weather icon & temperature for home and dashboard fragments
+                    binding.weatherTemperature.visibility = View.VISIBLE
+                    binding.weatherIcon.visibility = View.VISIBLE
+                }
+                else -> {
+                    // hide weather icon & temperature for other fragments
                     binding.weatherTemperature.visibility = View.GONE
                     binding.weatherIcon.visibility = View.GONE
                 }
-
+            }
+            when(destination.id) {
+                R.id.navigation_emergency_chat, R.id.navigation_emergency_stations -> {
+                    binding.navView.visibility = View.GONE
+                }
                 else -> {
-                    binding.weatherTemperature.visibility = View.VISIBLE
-                    binding.weatherIcon.visibility = View.VISIBLE
+                    binding.navView.visibility = View.VISIBLE
                 }
             }
         }
@@ -164,7 +162,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.logoutUser) {
-            Firebase.auth.signOut()
+            // Firebase.auth.signOut()
             return true
         } else if (item.itemId == R.id.viewInMaps){
             homeViewModel.currentLocation.value?.let {

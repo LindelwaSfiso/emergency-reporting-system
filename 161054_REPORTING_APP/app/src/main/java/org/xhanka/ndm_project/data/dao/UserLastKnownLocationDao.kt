@@ -1,8 +1,7 @@
 package org.xhanka.ndm_project.data.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import org.xhanka.ndm_project.data.models.UserLastLKnownLocation
+import org.xhanka.ndm_project.data.models.user.UserLastLKnownLocation
 
 
 @Dao

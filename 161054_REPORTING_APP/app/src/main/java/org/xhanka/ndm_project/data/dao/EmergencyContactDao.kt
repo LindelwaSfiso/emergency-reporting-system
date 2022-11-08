@@ -2,7 +2,7 @@ package org.xhanka.ndm_project.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import org.xhanka.ndm_project.data.models.EmergencyContact
+import org.xhanka.ndm_project.data.models.contacts.EmergencyContact
 
 @Dao
 interface EmergencyContactDao {

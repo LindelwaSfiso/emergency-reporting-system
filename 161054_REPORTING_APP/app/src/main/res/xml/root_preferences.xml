@@ -62,6 +62,10 @@
         <Preference
             app:key="userProfile"
             app:title="User Profile"/>
+        <Preference
+            android:key="userLogout"
+            android:title="Sign Out"
+            android:icon="@drawable/ic_logout"/>
 
     </PreferenceCategory>
 

@@ -19,7 +19,11 @@
         android:id="@+id/navigation_dashboard"
         android:name="org.xhanka.ndm_project.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/goToEmergencyChat"
+            app:destination="@id/navigation_emergency_chat" />
+    </fragment>
 
     <include app:graph="@navigation/navigation_emergency_contacts" />
 
@@ -37,4 +41,24 @@
             app:nullable="true" />
     </activity>
 
+    <fragment
+        android:id="@+id/navigation_emergency_stations"
+        android:name="org.xhanka.ndm_project.ui.contacts.first_responder.EmergencyStationsFragment"
+        tools:layout="@layout/fragment_emergency_stations"
+        android:label="Emerg. Stations"/>
+
+    <fragment
+        android:id="@+id/navigation_emergency_chat"
+        android:name="org.xhanka.ndm_project.ui.dashboard.ReportedEmergencyChatFragment"
+        tools:layout="@layout/fragment_reported_emergency_chat"
+        android:label="{label}">
+        <argument
+            android:name="label"
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="dashBoardMessage"
+            app:argType="org.xhanka.ndm_project.data.models.reporting.DashBoardMessage"
+            app:nullable="false"/>
+    </fragment>
 </navigation>

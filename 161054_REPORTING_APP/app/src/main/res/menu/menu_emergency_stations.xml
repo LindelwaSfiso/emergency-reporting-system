@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Emergency Stations"
+        android:id="@+id/menu_emergency_stations"
+        android:icon="@drawable/ic_emergency_stations"
+        app:showAsAction="ifRoom"/>
+</menu>

@@ -1,9 +1,9 @@
 package org.xhanka.ndm_project.ui.home
 
+import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
@@ -15,19 +15,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.FragmentHomeBinding
-import org.xhanka.ndm_project.ui.report_emergency.ReportActivity
-import org.xhanka.ndm_project.ui.report_emergency.VoskActivity
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
 import org.xhanka.ndm_project.utils.Utils
 import org.xhanka.ndm_project.utils.round
@@ -101,15 +100,26 @@ class HomeFragment : Fragment() {
         homeViewModel.userDeniedPermissions.observe(viewLifecycleOwner) {
             // TODO: THIS IS A HACK :), CONSIDER A PERMANENT APPROACH
             userHasDeniedPermissions = it
-
         }
 
         binding.reportButton.setOnClickListener {
-            /*val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportActivity(
-                victimLocation
+            // if user has granted required permissions, redirect to report
+            val permissionCheck = ContextCompat.checkSelfPermission(
+                it.context,
+                Manifest.permission.RECORD_AUDIO
             )
-            findNavController().navigate(action)*/
-            startActivity(Intent(this.context, VoskActivity::class.java))
+            if (permissionCheck != PERMISSION_GRANTED) {
+                Toast.makeText(requireContext(),
+                    "You have to grant MICROPHONE permissions first!",
+                    Toast.LENGTH_LONG
+                ).show()
+                Utils.requestPermissionsFromSettings(requireContext())
+            } else {
+                val action = HomeFragmentDirections.actionNavigationHomeToNavigationReportActivity(
+                    victimLocation
+                )
+                findNavController().navigate(action)
+            }
         }
 
         homeViewModel.currentLocation.observe(viewLifecycleOwner) {
@@ -137,7 +147,7 @@ class HomeFragment : Fragment() {
         mLocationRequest = LocationRequest.create()
         mLocationRequest.interval = UPDATE_INTERVAL_IN_MILLI
         mLocationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLI
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.priority = PRIORITY_HIGH_ACCURACY
     }
 
     private fun buildLocationSettingsRequest() {
@@ -155,8 +165,8 @@ class HomeFragment : Fragment() {
                 // update current location
                 homeViewModel.setCurrentLocation(locationResult.lastLocation)
                 Log.d(
-                    "TAG", "LATITUDE:\t${locationResult.lastLocation.latitude}, " +
-                            "LONGITUDE:\t${locationResult.lastLocation.longitude}"
+                    "TAG", "LATITUDE:\t${locationResult.lastLocation?.latitude}, " +
+                            "LONGITUDE:\t${locationResult.lastLocation?.longitude}"
                 )
             }
         }
@@ -173,7 +183,7 @@ class HomeFragment : Fragment() {
 
                 // THIS GIVES THE BEST ACCURACY >> INVESTIGATE WHY
                 mFusedLocationClient.getCurrentLocation(
-                    LocationRequest.PRIORITY_HIGH_ACCURACY,
+                    PRIORITY_HIGH_ACCURACY,
                     object : CancellationToken() {
                         override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
                             Log.d("TAG", "ON CANCELED REQUESTED")
@@ -182,7 +192,7 @@ class HomeFragment : Fragment() {
 
                         override fun isCancellationRequested(): Boolean {
                             Log.d("TAG", "IS CANCELLATION REQUESTED")
-                            return true
+                            return false
                         }
 
                     })

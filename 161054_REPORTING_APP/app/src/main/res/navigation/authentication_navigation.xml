@@ -3,43 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/authentication_navigation"
-    app:startDestination="@id/navigation_register_user">
+    app:startDestination="@id/navigation_login_user">
+
+    <fragment
+        android:id="@+id/navigation_login_user"
+        tools:layout="@layout/fragment_login_user"
+        android:name="org.xhanka.ndm_project.ui.registration.fragments.LoginUserFragment"
+        android:label="Sign In">
+
+        <action
+            android:id="@+id/goToRegisterAccount"
+            app:destination="@id/navigation_register_user"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_register_user"
         tools:layout="@layout/fragment_register_user"
-        android:name="org.xhanka.ndm_project.ui.registration.RegisterUserFragment"
-        android:label="Welcome!" >
-        <action
-            android:id="@+id/action_navigation_register_user_to_navigation_verify_phone_number"
-            app:destination="@id/navigation_verify_phone_number" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_verify_phone_number"
-        android:name="org.xhanka.ndm_project.ui.registration.VerifyPhoneNumberFragment"
-        android:label="Verify Number">
-
-        <argument
-            app:argType="string"
-            android:name="userPhoneNumber"
-            app:nullable="false" />
-
-        <argument
-            app:argType="string"
-            android:name="storedVerificationId"
-            app:nullable="false" />
-
-        <argument
-            app:argType="string"
-            android:name="userFullName"
-            app:nullable="false" />
-
-        <argument
-            app:argType="string"
-            android:name="userId"
-            app:nullable="false" />
-
-    </fragment>
+        android:name="org.xhanka.ndm_project.ui.registration.fragments.RegisterUserFragment"
+        android:label="Create Account" />
 
 </navigation>

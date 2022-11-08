@@ -8,71 +8,7 @@ import {Avatar, Fab, ListItemAvatar} from "@mui/material";
 import {Add, Delete, Edit, LocalFireDepartment, LocalHospitalOutlined, LocalPoliceOutlined} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 
-const stations = [
-    {
-        name: "Matsapha Police Station",
-        type: "POLICE",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Siteki Government Hospital",
-        type: "MEDIC",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Siteki Government Hospital",
-        type: "MEDIC",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Siteki Government Hospital",
-        type: "MEDIC",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Siteki Government Hospital",
-        type: "MEDIC",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Matsapha Police Station",
-        type: "POLICE",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-
-    {
-        name: "Nhlangano Fire Station",
-        type: "FIRE",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-
-    {
-        name: "Mbabane Government Hospital",
-        type: "MEDIC",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Manzini Police Station",
-        type: "POLICE",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-    {
-        name: "Nhlangano Police Station",
-        type: "POLICE",
-        location: "32.1313, 13.1313",
-        phone_number: "7648 0479"
-    },
-]
-
+import { stations } from "../config/configData";
 
 function IconType({type}) {
     let icon, bg;
@@ -142,7 +78,7 @@ export default class StationsScreen extends Component {
 
                 <List>
                     {
-                       this.state.stations.map((station, index) => {
+                        this.state.stations.map((station, index) => {
                             return (
                                 <Fragment key={index}>
                                     <ListItem key={index} secondaryAction={
@@ -151,7 +87,8 @@ export default class StationsScreen extends Component {
                                                 <Edit/>
                                             </IconButton>
 
-                                            <IconButton aria-label={"delete-action"} onClick={()=>this.removeStation(index)}>
+                                            <IconButton aria-label={"delete-action"}
+                                                        onClick={() => this.removeStation(index)}>
                                                 <Delete/>
                                             </IconButton>
                                         </Fragment>

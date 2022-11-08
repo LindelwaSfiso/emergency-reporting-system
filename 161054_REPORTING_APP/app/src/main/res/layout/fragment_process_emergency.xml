@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Material3.CircularProgressIndicator.ExtraSmall"
+        android:indeterminate="true"
+        android:id="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/warning_text"
+        android:textColor="#FF0000"
+        android:text="Review the information and press the confirm button to continue?"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="10dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/text_details"/>
+
+    <View
+        android:background="?android:listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_details"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <ImageView
+        android:padding="6dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_details"
+        app:layout_constraintBottom_toBottomOf="@id/text_details"
+        android:src="@drawable/ic_process_details"
+        app:tint="@color/settings_icon"
+        android:id="@+id/details_icon"
+        android:layout_width="46dp"
+        android:layout_height="0dp" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/warning_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/details_icon"
+        android:id="@+id/text_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Details:"/>
+
+    <View
+        android:background="?android:listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_details"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <TextView
+        android:layout_marginStart="46dp"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/helper_coordinates"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_details"
+        android:text="Location:"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textStyle="italic|bold"/>
+
+    <TextView
+        android:gravity="center_vertical"
+        android:textStyle="italic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/location"
+        app:layout_constraintStart_toEndOf="@id/helper_coordinates"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_details"
+        app:layout_constraintBottom_toBottomOf="@id/helper_coordinates"
+        android:text="(3.121312, -1.241212)"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_marginStart="46dp"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/helper_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/helper_coordinates"
+        android:text="Type:"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="@id/helper_coordinates"/>
+
+    <TextView
+        app:layout_constraintBottom_toBottomOf="@id/helper_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/emergency_type"
+        app:layout_constraintStart_toEndOf="@id/helper_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location"
+        android:text="MEDICAL"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:textStyle="italic|bold"/>
+
+    <TextView
+        android:layout_marginStart="46dp"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/helper_full_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/helper_type"
+        android:text="Full Name:"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="@id/helper_type"/>
+    <TextView
+        app:layout_constraintBottom_toBottomOf="@id/helper_full_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/full_name"
+        app:layout_constraintStart_toEndOf="@id/helper_full_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emergency_type"
+        android:text="Lindelwa Dlamini"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:textStyle="italic|bold"/>
+
+    <TextView
+        android:layout_marginStart="46dp"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/helper_phone_number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/helper_full_name"
+        android:text="Phone:"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="@id/helper_full_name"/>
+    <TextView
+        app:layout_constraintBottom_toBottomOf="@id/helper_phone_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/phone_number"
+        app:layout_constraintStart_toEndOf="@id/helper_phone_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/full_name"
+        android:text="7648 0479"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:textStyle="italic|bold"/>
+
+    <TextView
+        android:layout_marginStart="46dp"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/helper_found_station"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/helper_phone_number"
+        android:text="Station:"
+        android:textColor="#f00"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textStyle="italic|bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/helper_phone_number"/>
+    <TextView
+        android:textColor="#f00"
+        app:layout_constraintBottom_toBottomOf="@id/helper_found_station"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/found_station"
+        app:layout_constraintStart_toEndOf="@id/helper_found_station"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phone_number"
+        android:text="Bhunya Station"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:textStyle="italic|bold"
+        android:visibility="gone"/>
+
+    <View
+        android:background="?android:listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_list"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <ImageView
+        android:padding="6dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_list"
+        app:layout_constraintBottom_toBottomOf="@id/text_list"
+        android:src="@drawable/ic_process_list"
+        app:tint="@color/settings_icon"
+        android:id="@+id/list_icon"
+        android:layout_width="46dp"
+        android:layout_height="0dp" />
+    <TextView
+        android:layout_marginTop="15dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/found_station"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/details_icon"
+        android:id="@+id/text_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Process List:"/>
+
+    <View
+        android:background="?android:listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_list"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="46dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Initiating sms sending"
+            android:checked="false"
+            android:clickable="false"
+            android:id="@+id/step_one"
+            style="ThemeOverlay.App.CheckBox"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Locating the nearest station."
+            android:checked="false"
+            android:id="@+id/step_two"
+            android:clickable="false"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Sending emergency message to station."
+            android:checked="false"
+            android:id="@+id/step_three"
+            android:clickable="false"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="Confirm and process emergency"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/startProcessing"
+        android:layout_marginBottom="2dp"
+        android:paddingVertical="15dp"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="#fff"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,23 +1,33 @@
 package org.xhanka.ndm_project.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
 import org.xhanka.ndm_project.R
+import org.xhanka.ndm_project.ui.registration.AuthActivity
 import org.xhanka.ndm_project.utils.Constants
 import org.xhanka.ndm_project.utils.Utils
 
-class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
+class SettingsFragment : PreferenceFragmentCompat(), MenuProvider {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-    
-    // TODO: SETTINGS FRAGMENT SLOW ON START UP --> INVESTIGATE, UPGRADE LIBRARIES
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -38,13 +48,23 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 findNavController().navigate(action)
                 return true
             }
+            else if (it == "userLogout") {
+                Firebase.auth.signOut()
+                Toast.makeText(requireContext(), "Successfully Signed Out!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(requireContext(), AuthActivity::class.java))
+                requireActivity().finish()
+                return true
+            }
         }
 
         return super.onPreferenceTreeClick(preference)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return false
     }
 }

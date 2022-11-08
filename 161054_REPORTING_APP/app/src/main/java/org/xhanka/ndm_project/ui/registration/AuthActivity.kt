@@ -3,10 +3,12 @@ package org.xhanka.ndm_project.ui.registration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.R
 import org.xhanka.ndm_project.databinding.ActivityAuthenticationBinding
 
@@ -34,6 +36,7 @@ import org.xhanka.ndm_project.databinding.ActivityAuthenticationBinding
  *          -- if user already exits, log user in and redirect to MainActivity.kt
  *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
+@AndroidEntryPoint
 class AuthActivity: AppCompatActivity() {
 
     private var _binding: ActivityAuthenticationBinding ?= null
@@ -50,7 +53,8 @@ class AuthActivity: AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         navController = findNavController(R.id.nav_host_fragment_activity_authentication)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_register_user))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_login_user,
+            R.id.navigation_register_user))
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 

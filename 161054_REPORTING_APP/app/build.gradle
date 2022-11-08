@@ -56,7 +56,10 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
@@ -64,16 +67,17 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     // implementation("com.google.firebase:firebase-bom:29.0.4")
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-database:20.0.3'
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
-    implementation("com.firebaseui:firebase-ui-database:8.0.0")
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
+    implementation 'com.google.firebase:firebase-database:20.0.6'
+    implementation 'com.google.firebase:firebase-messaging:23.0.8'
+    implementation "com.firebaseui:firebase-ui-database:8.0.1"
+    implementation "com.google.firebase:firebase-firestore-ktx:24.3.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
     // implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     // Room database dependencies
@@ -99,18 +103,18 @@ dependencies {
     implementation("io.coil-kt:coil:1.4.0")
     implementation("io.coil-kt:coil-svg:1.4.0")
 
-    implementation("org.apache.opennlp:opennlp-tools:1.9.4")
+    implementation("org.apache.opennlp:opennlp-tools:2.0.0")
 
     // add vosk library
-    implementation 'net.java.dev.jna:jna:5.8.0@aar'
-    implementation('com.alphacephei:vosk-android:0.3.38@aar')
-    //implementation group: 'com.alphacephei', name: 'vosk-android', version: '0.3.38'
+    // implementation 'net.java.dev.jna:jna:5.8.0@aar'
+    // implementation('com.alphacephei:vosk-android:0.3.38@aar')
+
+    // AppWrite
+    // implementation 'io.appwrite:sdk-for-android:1.0.0'
 }
 
-
-
-tasks.register('genUUID') {
-    def uuid = UUID.randomUUID().toString()
+/*tasks.register('genUUID') {
+    def uuid = "405982f2-df83-4026-993b-1a261f13388c" // UUID.randomUUID().toString()
     def odir = file("$buildDir/generated/assets/model-en-us")
     def ofile = file("$odir/uuid")
     doLast {
@@ -119,4 +123,4 @@ tasks.register('genUUID') {
     }
 }
 
-preBuild.dependsOn(genUUID)
+preBuild.dependsOn(genUUID)*/

@@ -7,12 +7,30 @@
 
     <fragment
         android:id="@+id/navigation_report_emergency"
-        android:name="org.xhanka.ndm_project.ui.report_emergency.ReportEmergencyFragment"
+        android:name="org.xhanka.ndm_project.ui.report_emergency.report.ReportEmergencyFragment"
         android:label="Report Emergency"
         tools:layout="@layout/fragment_report_emergency">
         <argument
             android:name="victimLocation"
             app:argType="android.location.Location"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_navigate_to_process_emergency"
+            app:destination="@id/navigation_process_emergency" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_process_emergency"
+        android:name="org.xhanka.ndm_project.ui.report_emergency.process.ProcessEmergencyFragment"
+        android:label="Processing Emerg."
+        tools:layout="@layout/fragment_process_emergency">
+        <argument
+            android:name="victimLocation"
+            app:argType="android.location.Location"
+            app:nullable="true" />
+        <argument
+            android:name="emergencyType"
+            app:argType="string"
             app:nullable="true" />
     </fragment>
 

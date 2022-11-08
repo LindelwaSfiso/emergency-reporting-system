@@ -1,73 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parentContainer"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:id="@+id/parentContainer"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:focusable="true"
+    android:background="?selectableItemBackground"
     android:clickable="true"
-    android:background="?selectableItemBackground">
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="0dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        app:cardCornerRadius="60dp"
-        app:strokeWidth="1dp"
-        android:id="@+id/_a"
-        app:strokeColor="@android:color/darker_gray"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            app:fontFamily="sans-serif-condensed-medium"
-            android:textSize="25sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="A"
-            android:id="@+id/contactInitials"
-            android:gravity="center"/>
-
-    </com.google.android.material.card.MaterialCardView>
+    android:focusable="true">
 
     <TextView
-        android:layout_marginStart="20dp"
-        android:lines="1"
-        android:text="@string/title_emergency_contacts"
+        android:id="@+id/contactInitials"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/round_background"
+        android:gravity="center"
+        android:text="A"
+        android:textSize="25sp"
+        app:fontFamily="sans-serif-condensed-medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/contactFullName"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/contactFullName"
-        android:gravity="start|center"
+        android:layout_marginStart="20dp"
         android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="start|center"
+        android:lines="1"
+        android:text="@string/title_emergency_contacts"
         android:textSize="18sp"
 
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/contactPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/_a"
-        app:layout_constraintBottom_toTopOf="@id/contactPhoneNumber"/>
+        app:layout_constraintStart_toEndOf="@id/contactInitials"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        app:layout_constraintTop_toBottomOf="@id/contactFullName"
+        android:layout_width="0dp"
+        android:layout_height="1.5dp"
+        android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toTopOf="@id/contactPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/contactFullName"
-        android:layout_width="0dp"
-        android:layout_height="1.5dp"
-        android:background="?android:attr/listDivider" />
+        app:layout_constraintTop_toBottomOf="@id/contactFullName" />
 
     <TextView
+        android:id="@+id/contactPhoneNumber"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="start|center"
         android:lines="1"
         android:text="@string/title_emergency_contacts"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:id="@+id/contactPhoneNumber"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contactFullName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/contactFullName"/>
+        app:layout_constraintStart_toStartOf="@id/contactFullName"
+        app:layout_constraintTop_toBottomOf="@id/contactFullName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

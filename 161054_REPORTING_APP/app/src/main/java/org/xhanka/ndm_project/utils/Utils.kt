@@ -1,35 +1,31 @@
 package org.xhanka.ndm_project.utils
 
-import android.app.*
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.telephony.SmsManager
 import android.util.Log
-import android.view.WindowManager
+import android.view.View
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
+import androidx.recyclerview.widget.RecyclerView
 import org.xhanka.ndm_project.BuildConfig
-import org.xhanka.ndm_project.MainActivity
-import org.xhanka.ndm_project.R
-import org.xhanka.ndm_project.data.models.User
-import org.xhanka.ndm_project.ui.dashboard.DashboardFragment
-import org.xhanka.ndm_project.ui.report_emergency.ReportActivity
-import org.xhanka.ndm_project.utils.Constants.CHANNEL_ID
-import org.xhanka.ndm_project.utils.Constants.CHANNEL_NAME
+import org.xhanka.ndm_project.ui.report_emergency.report.ReportEmergencyViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Utils {
     companion object {
@@ -49,7 +45,7 @@ class Utils {
         }
 
         @Suppress("DEPRECATION")
-        fun sendSmsToEmergencyContacts (
+        fun sendSmsToEmergencyContacts(
             @NonNull context: Context,
             toNumber: String,
             message: String
@@ -67,85 +63,58 @@ class Utils {
             )
         }
 
-       fun getAddressFromLocation(context: Context, location: Location): Address? {
-           val geocoder = Geocoder(context)
-           return try {
-               val addresses = geocoder.getFromLocation(
-                   location.latitude, location.longitude, 1
-               )
-               addresses[0]
-           } catch (exception: Exception) {
-               exception.printStackTrace()
-               null
-           }
-       }
-
-
-        /**
-         * Static function that validates the given number.
-         *
-         * -> we only support Eswatini Phone Numbers Only
-         * -> A valid Eswatini Number has the following properties
-         *      --- starts with 76, 78, 79
-         *      --- is 8 characters long [without code]
-         *
-         *  Returns true if phone number is valid
-         */
-        fun isValidEswatiniPhoneNumber(areaCode: String = "+268", phoneNumber: String) : Boolean {
-            if (phoneNumber.trim().length != 8 || areaCode != "+268")
-                return false
-
-            val firstTwoNumbers = phoneNumber.trim().subSequence(0, 2).toString()
-
-            // 75 for testing purposes
-            return firstTwoNumbers == "75" || firstTwoNumbers == "79" || firstTwoNumbers == "78" || firstTwoNumbers == "76"
+        private fun checkCallPermission(activity: Activity, callback: (granted: Boolean) -> Unit) {
+            callback(
+                ContextCompat.checkSelfPermission(
+                    activity, Manifest.permission.CALL_PHONE
+                ) == PackageManager.PERMISSION_GRANTED
+            )
         }
 
-
-        /**
-         * Static function for saving user profile to USERS' node in our database
-         *
-         * This happens after user has successfully logged into the app
-         *  -- This will be used to set up one-to-one chats with local agents
-         *
-         *  Users DataBase structure
-         *      -- userUid [unique user id]
-         *          -- userFullName [user full name]
-         *          -- userID [user identification number]
-         *          -- userPhoneNumber [user phone number, with area code]
-         *
-         */
-        fun createUserProfile(
-            currentUser: FirebaseUser?,
-            userFullName: String,
-            userId: String,
-            userPhoneNumber: String
+        fun launchCallIntent(
+            recipient: String,
+            activity: Activity?,
+            onErrorCallBack: (error: String) -> Unit,
+            endActivity: () -> Unit
         ) {
-            currentUser?.let {
-                val usersDataBase = FirebaseDatabase.getInstance().getReference("USERS")
-                // save user to USERS_NODE
-
-                // TODO: CHECK IF USER ALREADY EXISTS
-                // IF EXITS -- OVERRIDE USER INFORMATION ELSE -- CREATE NEW NODE
-
-                val user = User(
-                    userFullName,
-                    userId,
-                    userPhoneNumber
-                )
-
-                val createUserTask = usersDataBase.child(it.uid).setValue(user.toHash())
-
-                if (createUserTask.isSuccessful)
-                    // todo: save user profile to local database
-                    Log.d("TAG", "S")
-
+            activity?.let {
+                checkCallPermission(activity) {
+                    // check if user has granted permissions
+                    if (it) {
+                        val action = Intent.ACTION_CALL
+                        Intent(action).apply {
+                            data = Uri.fromParts("tel", recipient, null)
+                            activity.startActivity(this)
+                        }
+                        // delay 200 milliseconds then end activity
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            endActivity()
+                        }, 500)
+                    } else {
+                        onErrorCallBack(
+                            "App requires 'CALL' Permission to make call. " +
+                                    "Grant required call permissions!"
+                        )
+                    }
+                }
             } ?: run {
-                // for some reason this is null
+                onErrorCallBack("An error occurred! Try Again")
             }
         }
 
-        
+        fun getAddressFromLocation(context: Context, location: Location): Address? {
+            val geocoder = Geocoder(context)
+            return try {
+                val addresses = geocoder.getFromLocation(
+                    location.latitude, location.longitude, 1
+                )
+                addresses[0]
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                null
+            }
+        }
+
         // HANDLE DARK MODE FOR ANDROID 8 (Pie) and below devices
         fun setDarkMode(darkMode: String) {
             when (darkMode) {
@@ -155,23 +124,86 @@ class Utils {
             }
         }
 
-        private fun getDarkMode(context: Context?): String {
-            context?.let {
-                val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(it)
-                return sharedPreferences.getString(Constants.DARK_MODE, "0").toString()
-            } ?: run {
-                return "0"
-            }
-        }
-
         fun toggleDarkMode(context: Context?) {
-            context?.let {
-                setDarkMode(getDarkMode(it))
+            val darkMode = context?.let {
+                val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(it)
+                sharedPreferences.getString(Constants.DARK_MODE, "0").toString()
+            } ?: run { "0" }
+
+            setDarkMode(darkMode)
+        }
+
+        fun getGroupChatId(userOneId: String, userTwoId: String): String {
+            return if (userOneId < userTwoId) "${userOneId}_{$userTwoId}"
+            else "${userTwoId}_${userOneId}"
+        }
+
+        fun formatDate(date: Date): String {
+            return try {
+                SimpleDateFormat(
+                    "yy/MM -- HH:mm:ss", Locale.getDefault()
+                ).format(date)
+            } catch (ignore: Exception) {
+                date.toString()
             }
         }
 
+        private val MEDICAL =
+            listOf("ambulance", "doctor", "hospital", "sick", "dead", "car accidents")
+        private val FIRE = listOf("fire", "burning", "forest", "extinguish")
+        private val POLICE = listOf("police", "crime", "hijacked", "hijacking")
 
-        fun persistentNotification(context: Context) {
+        fun searchForKeyWords(translatedText: String): String {
+            val score = arrayOf(0, 0, 0)
+            // todo: Improve selection algorithm
+
+            // test for medical keywords
+            for (keyword in MEDICAL) {
+                if (translatedText.contains(keyword, ignoreCase = true)) {
+                    // found match, increase medical score
+                    Log.d("TAG", "medical:  $keyword")
+                    score[0]++
+                }
+            }
+
+            // test for fire keywords
+            for (keyword in FIRE) {
+                if (translatedText.contains(keyword, ignoreCase = true)) {
+                    // found match, increase medical score
+                    Log.d("TAG", "fire:  $keyword")
+                    score[1]++
+                }
+            }
+
+            // test for fire keywords
+            for (keyword in POLICE) {
+                if (translatedText.contains(keyword, ignoreCase = true)) {
+                    // found match, increase medical score
+                    Log.d("TAG", "police:  $keyword")
+                    score[2]++
+                }
+            }
+
+            Log.d("TAG", "score: medical - ${score[0]}  fire - ${score[1]}  police - ${score[2]}")
+
+            if (score[0]==0 && score[1]==0 && score[2]==0) return "NO MATCHES, TRY AGAIN"
+
+            var indexValue = 0;
+            var max = 0
+            score.forEachIndexed { index, i ->
+                if (i >= max) {
+                    max = i
+                    indexValue = index
+                }
+            }
+            return when (indexValue) {
+                0 -> "MEDICAL"
+                1 -> "FIRE"
+                else -> "POLICE"
+            }
+        }
+
+        /*fun persistentNotification(context: Context) {
             val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -220,7 +252,19 @@ class Utils {
                             or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 )
             }
-        }
+        }*/
 
+    }
+
+    class VerticalSpace(private val verticalSpace: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            super.getItemOffsets(outRect, view, parent, state)
+            outRect.bottom = verticalSpace
+        }
     }
 }

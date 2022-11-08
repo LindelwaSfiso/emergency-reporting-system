@@ -1,41 +1,47 @@
 package org.xhanka.ndm_project.ui.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import org.xhanka.ndm_project.databinding.FragmentUserProfileBinding
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.preference.PreferenceFragmentCompat
+import org.xhanka.ndm_project.R
 
 
 /**
  * Fragment for modifying user information
  *
  * Information required from user:
- *  -> user ID
- *  -> user full name
- *  -> usr phone number [use registered phone number]
- *  - photo [!!!]
- *
+ *  -> user ID // user_id
+ *  -> user full name // user_full_name
+ *  -> usr phone number [use registered phone number] // user_phone_number
  */
 
-class UserProfileFragment : Fragment() {
-
-    private var _binding: FragmentUserProfileBinding ?= null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
-        return binding.root
+class UserProfileFragment : PreferenceFragmentCompat(), MenuProvider {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.user_profile_preferences, rootKey)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menu.clear()
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return false
+    }
+
+    companion object {
+        const val NAME_KEY = "user_full_name"
+        const val PHONE_NUMBER_KEY = "user_phone_number"
+        const val ID_KEY = "user_id"
+        const val EMAIL_KEY = "user_email"
     }
 }

@@ -17,7 +17,6 @@
     <fragment
         android:id="@+id/navigation_user_profile"
         android:name="org.xhanka.ndm_project.ui.settings.UserProfileFragment"
-        android:label="User Profile"
-        tools:layout="@layout/fragment_user_profile"/>
+        android:label="User Profile" />
 
 </navigation>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        android:key="user_full_name"
+        app:summary="Enter your full name."
+        android:title="Full Name"
+        android:defaultValue=""
+        app:icon="@drawable/ic_user_profile"/>
+
+    <EditTextPreference
+        app:key="user_id"
+        android:title="ID"
+        android:defaultValue=""
+        app:icon="@drawable/ic_user_profile"
+        app:summary="Enter your personal identity number."/>
+
+    <EditTextPreference
+        android:key="user_phone_number"
+        android:title="Phone Number"
+        android:defaultValue="+268 7648 0479"
+        app:icon="@drawable/ic_phone_number"
+        app:summary="Enter a phone number that can be used to contact you?"/>
+
+    <EditTextPreference
+        android:key="user_email"
+        android:title="Email"
+        android:defaultValue="sfisolindelwa@gmail.com"
+        app:icon="@drawable/ic_email"
+        app:summary="Enter your email."/>
+
+</PreferenceScreen>

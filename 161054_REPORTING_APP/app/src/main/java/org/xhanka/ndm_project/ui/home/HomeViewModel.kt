@@ -27,9 +27,11 @@ class HomeViewModel : ViewModel() {
     /**
      * Update the current user location,
      */
-    fun setCurrentLocation(location: Location) {
+    fun setCurrentLocation(location: Location?) {
         // update user interface with the newest location
-        _currentLocation.postValue(location)
+        location?.let {
+            _currentLocation.postValue(it)
+        }
 
 
 //        viewModelScope.launch {

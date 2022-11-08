@@ -1,10 +1,8 @@
 package org.xhanka.ndm_project.data.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Update
-import org.xhanka.ndm_project.data.models.User
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import org.xhanka.ndm_project.data.models.user.User
 
 @Dao
 interface UserProfileDao {
@@ -13,4 +11,10 @@ interface UserProfileDao {
 
     @Update
     suspend fun updateUserProfile(user: User)
+
+    @Query("SELECT * FROM USER_PROFILE LIMIT 1;")
+    fun getUserProfile(): LiveData<User>
+
+    @Query("DELETE FROM USER_PROFILE")
+    suspend fun removeUserProfile()
 }

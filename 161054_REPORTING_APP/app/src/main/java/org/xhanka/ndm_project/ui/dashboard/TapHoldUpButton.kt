@@ -8,10 +8,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -34,8 +34,6 @@ class TapHoldUpButton : View {
     private var upAnim: ValueAnimator? = null
     private val mArgbEvaluator = ArgbEvaluator()
     private var mClickListener: OnButtonClickListener? = null
-
-    val media = MediaPlayer.create(context, R.raw.pop)
 
     interface OnButtonClickListener {
         fun onLongHoldStart(v: View?)
@@ -91,9 +89,8 @@ class TapHoldUpButton : View {
                     if (!longHoldEnabled) return@Runnable
                     if (touchState == MotionEvent.ACTION_DOWN) {
                         longHold = true
-                        startColorChangeAnimation(mCircleColor, mCircleColorOnHold)
                         if (mClickListener != null) mClickListener!!.onLongHoldStart(this@TapHoldUpButton)
-                        media.start()
+                        startColorChangeAnimation(mCircleColor, mCircleColorOnHold)
                     }
                 }, LONG_HOLD_DELAY.toLong())
                 startDownAnimation()
@@ -215,11 +212,11 @@ class TapHoldUpButton : View {
     }
 
     companion object {
-        private const val DEF_STROKE_WIDTH = 8
+        private const val DEF_STROKE_WIDTH = 3
         private const val DEF_RING_COLOR = Color.WHITE
         private const val DEF_CIRCLE_COLOR = Color.RED
-        private const val DEF_CIRCLE_GAP = 8
-        private const val LONG_HOLD_DELAY = 50
+        private const val DEF_CIRCLE_GAP = 0
+        private const val LONG_HOLD_DELAY = 100
         private const val ANIM_DURATION = 150
     }
 }

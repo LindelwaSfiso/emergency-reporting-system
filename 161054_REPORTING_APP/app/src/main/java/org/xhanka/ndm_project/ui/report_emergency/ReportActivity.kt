@@ -10,7 +10,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.R
 import org.xhanka.ndm_project.databinding.ActivityReportBinding
-import org.xhanka.ndm_project.utils.Utils
 
 @AndroidEntryPoint
 class ReportActivity : AppCompatActivity() {

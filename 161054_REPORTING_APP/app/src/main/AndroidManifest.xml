@@ -7,8 +7,10 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <queries>
         <!-- To use google speech recognition feature -->
@@ -55,7 +57,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.report_emergency.VoskActivity"/>
+        <service android:name=".utils.SendSmsService"/>
 
     </application>
 

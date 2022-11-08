@@ -12,4 +12,10 @@ object Constants {
 
     const val CHANNEL_ID = "_id"
     const val CHANNEL_NAME = "_channel_name"
+
+    // databases
+    const val DB_STATIONS_COLLECTION = "EMERGENCY_STATIONS"
+    const val DB_USERS_COLLECTION = "USERS"
+    const val DB_EMERGENCIES_COLLECTION = "LOGGED_EMERGENCIES"
+    const val DB_USER_DASHBOARD_COLLECTION = "USER_DASHBOARD"
 }

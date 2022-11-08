@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/navigation_new_or_update_contact"
-        android:name="org.xhanka.ndm_project.ui.contacts.NewOrUpdateContactFragment"
+        android:name="org.xhanka.ndm_project.ui.contacts.personal.NewOrUpdateContactFragment"
         android:label="{label}">
         <argument
             app:argType="string"
@@ -27,7 +27,7 @@
         <argument
             android:name="emergencyContact"
             app:nullable="true"
-            app:argType="org.xhanka.ndm_project.data.models.EmergencyContact"/>
+            app:argType="org.xhanka.ndm_project.data.models.contacts.EmergencyContact"/>
         <action
             android:id="@+id/action_nav_new_or_update_to_emergency_contacts"
             app:destination="@id/navigation_emergency_contacts"

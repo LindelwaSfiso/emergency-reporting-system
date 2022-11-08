@@ -34,6 +34,8 @@
     <string name="settings">Settings</string>
     <string name="user_full_name">Full Name</string>
     <string name="user_id">Personal ID Number</string>
+    <string name="user_email">Email</string>
+    <string name="user_password">Password</string>
     <string name="report_emergency">REPORT EMERGENCY</string>
     <string name="try_again">Try Again</string>
     <string name="no_connection">No connection</string>
