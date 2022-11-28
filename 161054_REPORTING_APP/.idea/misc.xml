@@ -17,11 +17,21 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_emergency_contacts.xml" value="0.11041666666666666" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_emergency_stations.xml" value="0.105" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_empty_view.xml" value="0.12083333333333333" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_fire.xml" value="0.1" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_gps.xml" value="0.1265" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_home_black.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_import_contact.xml" value="0.21041666666666667" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_launcher.xml" value="0.1285" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1285" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_launcher_icon_background.xml" value="0.1" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_launcher_icon_foreground.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_location.xml" value="0.10729166666666666" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_logout.xml" value="0.1" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_medic.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.17083333333333334" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_phone_number.xml" value="0.112" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_police.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_process_details.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_process_list.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_pulse.xml" value="0.12552083333333333" />
@@ -30,7 +40,10 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_settings.xml" value="0.27708333333333335" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_settings_theme.xml" value="0.1245" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_shape.xml" value="0.17083333333333334" />
-        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash.xml" value="0.33" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash.xml" value="0.1445" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash_2.xml" value="0.1445" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash_new.xml" value="0.1325" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_splash_old.xml" value="0.1335" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_sync.xml" value="0.27708333333333335" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_user_profile.xml" value="0.27282051282051284" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/drawable/ic_weather_black.xml" value="0.27708333333333335" />
@@ -38,6 +51,7 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/_item.xml" value="0.5" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/activity_authentication.xml" value="0.1308876811594203" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/activity_maps.xml" value="0.10099637681159421" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/activity_report.xml" value="0.14635416666666667" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/appwrite.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/dashboard_message_item.xml" value="0.3525" />
@@ -47,13 +61,16 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_confirm_call.xml" value="0.3349282296650718" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_confirm_emergency.xml" value="0.18" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_dashboard.xml" value="0.19610507246376813" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_dashboard_viewpager.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_emergency_contacts.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_emergency_stations.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_home.xml" value="0.22" />
-        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_login_user.xml" value="0.25" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_login_user.xml" value="0.5" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_new_or_update_contact.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_phone_auth.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_process_emergency.xml" value="0.3175355450236967" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_public_notice.xml" value="0.17527173913043478" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_register_user.xml" value="0.33" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_report_emergency.xml" value="0.18" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/fragment_reported_emergency_chat.xml" value="0.32592592592592595" />
@@ -69,6 +86,7 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/location_permission_denied.xml" value="0.17255434782608695" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/main.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/main_activity.xml" value="0.17255434782608695" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/public_notice_item.xml" value="0.18" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/reported_emergency_chat_item.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/reported_emergency_chat_receive_item.xml" value="0.22" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/layout/reported_emergency_chat_send_item.xml" value="0.75" />
@@ -84,6 +102,7 @@
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/menu/main_menu.xml" value="0.67" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/menu/menu_add_contacts.xml" value="0.19427083333333334" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/menu/menu_emergency_stations.xml" value="0.15185185185185185" />
+        <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/mipmap-anydpi-v26/ic_launcher_icon_round.xml" value="0.1" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/xml/root_preferences.xml" value="0.18" />
         <entry key="..\:/Phone Copy/Moodle 5/EEE 590 - Project/APP/161054_REPORTING_APP/app/src/main/res/xml/user_profile_preferences.xml" value="0.15" />
       </map>
