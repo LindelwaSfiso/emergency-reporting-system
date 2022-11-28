@@ -13,6 +13,8 @@ import Grid from "@mui/material/Grid";
 import {Alert, Snackbar, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Send} from "@mui/icons-material";
+import {doc, collection, addDoc, Timestamp, serverTimestamp} from "firebase/firestore";
+import {db} from "../../config/firebaseConfig";
 
 
 export default function SendWarningsPage() {
@@ -28,18 +30,47 @@ export default function SendWarningsPage() {
         setValues({...values, [prop]: event.target.value});
     };
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault()
         console.log(values)
+        
+        if (values.broadCastMessage === ""  || values.broadCastMessage === "") {
+            setValues({
+                ...values,
+                isError: "error",
+                feedbackMessage: "Message can not be empty!",
+                open: true
+            })
+            return;
+        }
 
-        setValues({
-            ...values,
-            broadCastType: "",
-            broadCastMessage: "",
-            isError: "success",
-            feedbackMessage: "Successfully sent broadcast message to all users!",
-            open: true
-        })
+        try {
+            await addDoc(collection(db, "PUBLIC_NOTICE"), {
+                message: values.broadCastMessage,
+                timeStamp:  serverTimestamp(),
+                noticeType: values.broadCastType
+            });
+
+            setValues({
+                ...values,
+                broadCastType: "",
+                broadCastMessage: "",
+                isError: "success",
+                feedbackMessage: "Successfully sent broadcast message to all users!",
+                open: true
+            })
+
+        } catch (e) {
+            console.log(e)
+            setValues({
+                ...values,
+                broadCastType: "",
+                broadCastMessage: "",
+                isError: "error",
+                feedbackMessage: "Error sending public notice message! Try again.",
+                open: true
+            })
+        }
     }
 
     return (
@@ -89,7 +120,7 @@ export default function SendWarningsPage() {
                 </form>
                 <Snackbar
                     anchorOrigin={{vertical: "bottom", horizontal:"right"}}
-                    open={values.open} autoHideDuration={400}>
+                    open={values.open} autoHideDuration={1000}>
                     <Alert severity={values.isError} sx={{ width: '100%' }} >
                         {values.feedbackMessage}
                     </Alert>

@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import {ChatContext} from "../../context/ChatContext";
 import {doc, onSnapshot, updateDoc, arrayUnion, Timestamp, serverTimestamp} from "firebase/firestore";
 import {db} from "../../config/firebaseConfig";
-import Message from "./Message";
+import { MessageReceiver, MessageSender } from "./Message";
 import "../css/custom_css/input.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -32,9 +32,11 @@ export default function ViewNotificationPage() {
     const victim = data.user
 
     useEffect(() => {
-        const unSub = onSnapshot(doc(db, "LOGGED_EMERGENCIES", data.conversationId), (document) => {
-            console.log(document.exists(), document.data())
-            document.exists() && setMessages(document.data().messages)
+        const unSub = onSnapshot(doc(db, "LOGGED_EMERGENCIES", data.conversationId), (document1) => {
+            console.log(document1.exists(), document1.data())
+            document1.exists() && setMessages(document1.data().messages)
+            const box = document.getElementById("message-box")
+            box.scrollTop = box.scrollHeight;
         })
 
         return () => {
@@ -105,16 +107,17 @@ export default function ViewNotificationPage() {
                     </Grid>
                     <Grid item xs mr={4}>
                         <Typography color={"primary"} component={"h5"} mt={1}>
-                            From: {victim.fullName}
+                            From: {victim.displayName}
                         </Typography>
                     </Grid>
                 </Grid>
                 <Divider/>
 
-                <div className={"messages"}>
-                    {messages && messages.map((message, index) => (
-                        <Message message={message} key={index}/>
-                    ))}
+                <div className={"chat-feed"} id="message-box">
+                    {messages && messages.map((message, index) => {
+                        return message.senderUid === currentUser.uid ? ( <MessageSender message={message} key={index}/>)
+                            : (<MessageReceiver message={message} key={index}/>)
+                    } )}
                 </div>
 
                 <Box component={"footer"}
@@ -144,3 +147,5 @@ export default function ViewNotificationPage() {
         </React.Fragment>
     );
 }
+
+// https://eswatiniemergencyservices.netlify.app/

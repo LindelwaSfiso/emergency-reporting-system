@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 
 import "../css/custom_css/Main.css"
 import Drawer from "../home/Drawer";
 import Divider from "@mui/material/Divider";
 import { DataGrid } from '@mui/x-data-grid';
+import {collection, doc, getDocs, onSnapshot} from "firebase/firestore";
+import {db} from "../../config/firebaseConfig";
 
 
 const columns = [
@@ -72,6 +74,21 @@ const data = [
 ]
 
 export default function StationsListPage() {
+    const [stations, setStations] = useState([])
+
+    /*useEffect(() => {
+        const unSub = async () => {
+            await getDocs(collection(db, "EMERGENCY_STATIONS")).then((a) => {
+                a.forEach((document) => {
+                    console.log(document.data())
+                })
+            })
+        }
+
+        return () => {
+            unSub()
+        }
+    }, [setStations])*/
 
     return (
         <React.Fragment>

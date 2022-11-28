@@ -5,7 +5,7 @@ import "../css/custom_css/Main.css"
 import Drawer from "../home/Drawer";
 import Divider from "@mui/material/Divider";
 import {
-    Avatar, FormControl,
+    Avatar, CircularProgress, FormControl,
     InputAdornment,
     InputLabel,
     ListItemAvatar,
@@ -23,6 +23,7 @@ import {collection, doc, getDocs, getDoc, setDoc, serverTimestamp, updateDoc, on
 import {db} from "../../config/firebaseConfig";
 import {AuthContext} from "../../context/AuthContext";
 import {forEach} from "react-bootstrap/ElementChildren";
+import Box from "@mui/material/Box";
 
 function stringToColor(string) {
     let hash = 0;
@@ -54,12 +55,15 @@ function stringAvatar(name) {
 }
 
 export default function NotificationsPage() {
+    // todo: consider using a separate state for each variable, I dont understand the bug :)
     const [values, setValues] = useState({
         searchText: "",
         users: [],
         errors: "",
-        dashBoardMessages: []
+        visibility: 'visible'
     })
+    const [dashBoardMessages, setDashBoardMessages] = useState([])
+
     const {dispatch} = useContext(ChatContext);
     const {currentUser} = useContext(AuthContext)
     const navigation = useNavigate();
@@ -93,17 +97,18 @@ export default function NotificationsPage() {
                 const data = doc.data()
                 if (data !== undefined) {
                     if (data.hasOwnProperty("created")) {delete data.created}
-                    setValues({...values, dashBoardMessages: data})
+                    setDashBoardMessages(data)
                 } else {
-
+                    console.log("error")
                 }
+                setValues({...values, visibility: 'hidden'})
             })
             return () => {
                 unSub();
             }
         }
         currentUser.uid && getDashBoard()
-    }, [currentUser.uid])
+    }, [currentUser.uid, setValues])
 
     const navigateToChat = async (e, info) => {
         e.preventDefault()
@@ -179,7 +184,19 @@ export default function NotificationsPage() {
                 </Grid>
                 <Divider/>
                 <List sx={{width: '100%', bgcolor: 'background.paper'}}>
-                    {values.dashBoardMessages && Object.entries(values.dashBoardMessages)?.map((message, index) => (
+                    {values.users && values.users.map((data, index) => (
+                        <div key={index}>
+                            <ListItemButton onClick={(e) => navigateToChat(e, data)}>
+                                <ListItemAvatar>
+                                    <Avatar {...stringAvatar(data.fullName)} />
+                                </ListItemAvatar>
+                                <ListItemText primary={data.fullName} secondary={data.email}/>
+                            </ListItemButton><Divider variant="inset" component="li"/>
+                            <Divider />
+                        </div>
+                    ))}
+
+                    {dashBoardMessages && Object.entries(dashBoardMessages)?.map((message, index) => (
                         <div key={index}>
                             <ListItemButton onClick={(e) => navigateToChat(e, message)}>
                                 <ListItemAvatar>
@@ -189,18 +206,11 @@ export default function NotificationsPage() {
                             </ListItemButton><Divider variant="inset" component="li"/>
                         </div>
                     ))}
-
-                    {values.users && values.users.map((data, index) => (
-                        <div key={index}>
-                            <ListItemButton onClick={(e) => navigateToChat(e, data)}>
-                                <ListItemAvatar>
-                                    <Avatar {...stringAvatar(data.fullName)} />
-                                </ListItemAvatar>
-                                <ListItemText primary={data.fullName} secondary={data.email}/>
-                            </ListItemButton><Divider variant="inset" component="li"/>
-                        </div>
-                    ))}
                 </List>
+
+                <Box sx={{ position: 'absolute', bottom: '50px', right: '100px', visibility: values.visibility}}>
+                    <CircularProgress />
+                </Box>
             </Drawer>
         </React.Fragment>
     );
