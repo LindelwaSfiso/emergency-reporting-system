@@ -49,12 +49,12 @@ class SendSmsService: LifecycleService() {
             val totalCount = it.size
             Log.d("TAG", "STATIONS SIZE:\t$totalCount")
             it?.forEachIndexed { index, emergencyContact ->
-                // Log.d("TAG", message)
-                /*Utils.sendSmsToEmergencyContacts(
+                Log.d("TAG", "${emergencyContact.contactFullName} ${emergencyContact.contactPhoneNumber}")
+                Utils.sendSmsToEmergencyContacts(
                     context = applicationContext,
-                    toNumber = emergencyContact.contactPhoneNumber,
-                    message = DEFAULT_SMS_MESSAGE
-                )*/
+                    toNumber = emergencyContact.contactPhoneNumber.trim(),
+                    message = message
+                )
                 updateNotification(index, totalCount, createNotification())
             }
             val notify = createNotification()
@@ -116,6 +116,6 @@ class SendSmsService: LifecycleService() {
         const val NOTIFICATION_ID = 160
         const val NOTIFICATION_CHANNEL_ID = "com.xhanka.ndm"
         const val ACTION_SEND_SMS = "send_sms"
-        const val DEFAULT_SMS_MESSAGE = "[EMERGENCY] Hi? %s here. I'm in an emergency, you can find me here %s.)"
+        const val DEFAULT_SMS_MESSAGE = "[ALERT] Hi? %s here. I'm in an emergency, you can find me here https://maps.google.com/?q=%s.)"
     }
 }

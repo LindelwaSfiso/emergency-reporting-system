@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -39,6 +38,8 @@ class ProcessEmergencyViewModel @Inject constructor(dataBase: MainDataBase): Vie
     fun sendEmergencyNotificationToServices(
         userId: String,
         emergencyStationId: String,
+        stationName: String,
+        userName: String,
         coordinates: Location,
         emergencyMessageBody: String,
         emergencyType: String
@@ -64,7 +65,8 @@ class ProcessEmergencyViewModel @Inject constructor(dataBase: MainDataBase): Vie
             .update(DashBoardMessage(
                 lastMessage = emergencyMessageBody,
                 uid = emergencyStationId,
-                senderUid = userId
+                senderUid = userId,
+                displayName = stationName
             ).toHash(conversationId)).await()
 
         // 2. update dashboard of other user
@@ -73,7 +75,8 @@ class ProcessEmergencyViewModel @Inject constructor(dataBase: MainDataBase): Vie
             .update(DashBoardMessage(
                 lastMessage = emergencyMessageBody,
                 uid = userId,
-                senderUid = userId
+                senderUid = userId,
+                displayName = userName
             ).toHash(conversationId)).await()
 
         db.collection(Constants.DB_EMERGENCIES_COLLECTION)

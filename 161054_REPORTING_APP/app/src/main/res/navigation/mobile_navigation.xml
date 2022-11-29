@@ -16,14 +16,20 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="org.xhanka.ndm_project.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_dashboard_viewpager"
+        android:name="org.xhanka.ndm_project.ui.dashboard.DashBoardViewPagerFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard">
+        tools:layout="@layout/fragment_dashboard_viewpager">
         <action
             android:id="@+id/goToEmergencyChat"
             app:destination="@id/navigation_emergency_chat" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="org.xhanka.ndm_project.ui.dashboard.dashbord.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 
     <include app:graph="@navigation/navigation_emergency_contacts" />
 
@@ -49,7 +55,7 @@
 
     <fragment
         android:id="@+id/navigation_emergency_chat"
-        android:name="org.xhanka.ndm_project.ui.dashboard.ReportedEmergencyChatFragment"
+        android:name="org.xhanka.ndm_project.ui.dashboard.chat.ReportedEmergencyChatFragment"
         tools:layout="@layout/fragment_reported_emergency_chat"
         android:label="{label}">
         <argument

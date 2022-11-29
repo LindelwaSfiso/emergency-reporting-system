@@ -52,6 +52,8 @@ class ConfirmEmergencyBottomFragment: BottomSheetDialogFragment () {
             Navigation.findNavController(it, R.id.nav_host_fragment_activity_main)
         }
 
+        binding.contactEmergencies.isEnabled = type != "NO MATCHES, TRY AGAIN"
+
         binding.contactEmergencies.setOnClickListener {
             navController?.apply {
                 navigate(ReportEmergencyFragmentDirections.actionNavigateToProcessEmergency(

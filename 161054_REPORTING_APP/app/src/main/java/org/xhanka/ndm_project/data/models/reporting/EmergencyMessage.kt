@@ -11,17 +11,6 @@ data class EmergencyMessage(
     var timeStamp: String = "",
     var senderUid: String = ""
 ) {
-    fun toHash(): FieldValue {
-        return FieldValue.arrayUnion(
-                mapOf(
-                    "emergencyLocation" to emergencyLocation,
-                    "emergencyType" to emergencyType,
-                    "emergencyMessageBody" to emergencyMessageBody,
-                    "timeStamp" to Timestamp.now(),
-                    "senderUid" to senderUid
-                )
-            )
-    }
 
     companion object {
         fun toHash(

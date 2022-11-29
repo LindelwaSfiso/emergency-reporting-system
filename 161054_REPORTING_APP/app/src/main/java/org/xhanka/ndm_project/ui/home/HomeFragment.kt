@@ -134,9 +134,7 @@ class HomeFragment : Fragment() {
             binding.userLongitude.text = it.longitude.toString()
 
             binding.accuracy2.text = String.format("${it.accuracy} m")
-            binding.lastUpdate2.text = SimpleDateFormat(
-                "yy/MM -- HH:mm:ss", Locale.getDefault()
-            ).format(Date())
+            binding.lastUpdate2.text = Utils.formatDate(Calendar.getInstance().time)
             binding.altitude2.text = if (it.hasAccuracy()) String.format("${it.altitude.round()} m")
             else "N/A"
         }

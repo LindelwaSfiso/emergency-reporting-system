@@ -6,8 +6,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceFragmentCompat
+import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.R
 
 
@@ -20,7 +22,10 @@ import org.xhanka.ndm_project.R
  *  -> usr phone number [use registered phone number] // user_phone_number
  */
 
+@AndroidEntryPoint
 class UserProfileFragment : PreferenceFragmentCompat(), MenuProvider {
+    private val userViewModel by viewModels<UserViewModel>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)

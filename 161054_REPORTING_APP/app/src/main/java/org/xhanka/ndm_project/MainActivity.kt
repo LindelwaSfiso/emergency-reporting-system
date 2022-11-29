@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_contacts,
+                R.id.navigation_home, R.id.navigation_dashboard_viewpager,
+                R.id.navigation_dashboard, R.id.navigation_contacts,
                 R.id.navigation_settings_screen
             )
         )
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_home, R.id.navigation_dashboard -> {
+                R.id.navigation_home, R.id.navigation_dashboard_viewpager -> {
                     // show weather icon & temperature for home and dashboard fragments
                     binding.weatherTemperature.visibility = View.VISIBLE
                     binding.weatherIcon.visibility = View.VISIBLE
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        setUpWeatherToolBar()
+        // setUpWeatherToolBar()
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -161,10 +162,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.logoutUser) {
-            // Firebase.auth.signOut()
-            return true
-        } else if (item.itemId == R.id.viewInMaps){
+        if (item.itemId == R.id.viewInMaps){
             homeViewModel.currentLocation.value?.let {
                 startActivity(Intent(ACTION_VIEW, Uri.parse(
                     "geo:0,0?q=" + it.latitude +"," + it.longitude))

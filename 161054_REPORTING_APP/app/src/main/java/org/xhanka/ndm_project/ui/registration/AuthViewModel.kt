@@ -42,7 +42,9 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
         currentUser: FirebaseUser?,
         userFullName: String,
         userEmail: String,
-        userPhoneNumber: String
+        userPhoneNumber: String,
+        id: String,
+        doneFunction: (user:User) -> Unit
     ) = CoroutineScope(Dispatchers.IO).launch {
 
         currentUser?.let {
@@ -50,7 +52,7 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
                 uid = currentUser.uid,
                 fullName = userFullName,
                 email = userEmail,
-                ID = "",
+                ID = id,
                 phoneNumber = userPhoneNumber
             )
 
@@ -68,20 +70,22 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
                 // if above operation is successful, save user locally
                 userProfileDao.removeUserProfile()
                 userProfileDao.insertUserProfile(user)
+                doneFunction (user)
             } catch (ignore: Exception) {
                 Log.d("TAG", ignore.message.toString())
             }
         }
     }
 
-    fun getUserProfileAfterLogin(uid: String?, doneFunction: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+    fun getUserProfileAfterLogin(uid: String?, doneFunction: (user: User?) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        var user: User ?= null
         try {
             uid?.let {
                 val userProfile = db.collection(DB_USERS_COLLECTION).document(uid).get().await()
-                val user = userProfile.toObject<User>()
+                user = userProfile.toObject<User>()
                 user?.let {
                     userProfileDao.removeUserProfile()
-                    userProfileDao.insertUserProfile(user)
+                    userProfileDao.insertUserProfile(user!!)
                 }
             }
         } catch (exception: Exception) {
@@ -90,6 +94,6 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
 
         // end activity if everything is done
         // consider retrying for getting profile
-        doneFunction()
+        doneFunction(user)
     }
 }

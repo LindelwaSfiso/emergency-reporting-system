@@ -148,6 +148,16 @@ class Utils {
             }
         }
 
+        fun formatDate2(date: Date): String {
+            return try {
+                SimpleDateFormat(
+                    "yy/MM", Locale.getDefault()
+                ).format(date)
+            } catch (ignore: Exception) {
+                date.toString()
+            }
+        }
+
         private val MEDICAL =
             listOf("ambulance", "doctor", "hospital", "sick", "dead", "car accidents")
         private val FIRE = listOf("fire", "burning", "forest", "extinguish")
@@ -188,7 +198,7 @@ class Utils {
 
             if (score[0]==0 && score[1]==0 && score[2]==0) return "NO MATCHES, TRY AGAIN"
 
-            var indexValue = 0;
+            var indexValue = 0
             var max = 0
             score.forEachIndexed { index, i ->
                 if (i >= max) {

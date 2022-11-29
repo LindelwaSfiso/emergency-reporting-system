@@ -2,6 +2,7 @@ package org.xhanka.ndm_project.ui.registration.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -61,8 +62,10 @@ class LoginUserFragment : Fragment() {
                 if (task.isSuccessful) {
                     // sign in user, redirect to home app
                     viewModel.getUserProfileAfterLogin(Firebase.auth.currentUser?.uid) {
+                        it?.saveToPreferences(requireContext())
                         startActivity(Intent(requireContext(), MainActivity::class.java))
                         requireActivity().finish()
+
                     }
                 } else {
                     Snackbar.make(

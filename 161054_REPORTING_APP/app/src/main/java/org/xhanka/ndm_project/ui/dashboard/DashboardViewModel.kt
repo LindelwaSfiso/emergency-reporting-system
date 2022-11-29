@@ -5,18 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
 import org.xhanka.ndm_project.data.models.reporting.DashBoardMessage
 import org.xhanka.ndm_project.data.models.reporting.EmergencyMessage
-import org.xhanka.ndm_project.utils.Constants
+import org.xhanka.ndm_project.data.models.reporting.PublicNotice
 import org.xhanka.ndm_project.utils.Constants.DB_EMERGENCIES_COLLECTION
+import org.xhanka.ndm_project.utils.Constants.DB_PUBLIC_NOTICE_COLLECTION
 import org.xhanka.ndm_project.utils.Constants.DB_USER_DASHBOARD_COLLECTION
 import org.xhanka.ndm_project.utils.Utils
-import kotlin.collections.HashMap
 
 
 class DashboardViewModel : ViewModel() {
@@ -25,6 +24,13 @@ class DashboardViewModel : ViewModel() {
 
     private var _dashBoardMessages: MutableLiveData<List<DashBoardMessage>?> = MutableLiveData()
     val dashBoardMessages: LiveData<List<DashBoardMessage>?> = _dashBoardMessages
+
+    private var _publicNotice: MutableLiveData<List<PublicNotice>> = MutableLiveData()
+    val publicNotice: LiveData<List<PublicNotice>> = _publicNotice
+
+    private var _displayNotifications: MutableLiveData<Boolean> = MutableLiveData(false)
+    val displayNotifications: LiveData<Boolean> = _displayNotifications
+    private var firstTime = true
 
     private var _stateMessage: MutableLiveData<String> = MutableLiveData()
     val stateMessage: LiveData<String> = _stateMessage
@@ -91,7 +97,6 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun subscribeToUserConversation(conversationId: String) {
-        Log.d("TAG", "SUBSCRIBING TO CONVERSATION")
         db.collection(DB_EMERGENCIES_COLLECTION).document(conversationId)
             .addSnapshotListener { querySnapshot, exception ->
                 exception?.let {
@@ -132,8 +137,42 @@ class DashboardViewModel : ViewModel() {
                             _stateMessage.postValue(ignore.message.toString())
                         }
                     }
-                    list.sortBy { a -> a.timeStamp }
+                    list.sortBy { a -> timestamp(a.timeStamp) }
                     _conversationMessages.postValue(list)
+                }
+            }
+    }
+
+    private fun timestamp(timeStamp: String): Timestamp {
+        // todo: find a better way of doing this, it is inefficient
+        return try {
+            val timestamp = Regex("[0-9]+", RegexOption.IGNORE_CASE).findAll(timeStamp)
+                .map(MatchResult::value).toList()
+            Timestamp(timestamp[0].toLong(), timestamp[1].toInt())
+        } catch (e: Exception) {
+            Timestamp.now()
+        }
+    }
+
+    fun subscribeToPublicNotice() {
+        db.collection(DB_PUBLIC_NOTICE_COLLECTION)
+            .addSnapshotListener { querySnapshot, exception ->
+                exception?.let {
+                    _stateMessage.postValue(it.message)
+                    return@addSnapshotListener
+                }
+
+                querySnapshot?.let { snapshot ->
+                    val list = mutableListOf<PublicNotice>()
+                    snapshot.forEach { document ->
+                        val notice = document.toObject<PublicNotice>()
+                        list.add(notice)
+                    }
+                    list.sortBy { a -> a.timeStamp }
+                    _publicNotice.postValue(list)
+
+                    if (firstTime) firstTime = false
+                    else _displayNotifications.postValue(true)
                 }
             }
     }

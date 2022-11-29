@@ -10,14 +10,14 @@
         android:paddingBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:civ_border_color="@color/colorPrimary"
+        android:src="@drawable/ic_splash_new"
         app:civ_border_width="2dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/userEmailContainer"
         android:id="@+id/logo"
-        android:src="@drawable/ic_splash"
+        app:civ_border_color="#FFDEDDE1"
         android:contentDescription="@string/app_name"/>
 
     <com.google.android.material.textfield.TextInputLayout

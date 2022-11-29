@@ -10,13 +10,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.data.models.contacts.EmergencyStation
 import org.xhanka.ndm_project.databinding.FragmentProcessEmergencyBinding
+import org.xhanka.ndm_project.ui.settings.UserProfileFragment
 import org.xhanka.ndm_project.utils.SendSmsService
 import org.xhanka.ndm_project.utils.parseCoordinates
+import java.util.*
 
 @AndroidEntryPoint
 class ProcessEmergencyFragment : Fragment() {
@@ -28,6 +31,7 @@ class ProcessEmergencyFragment : Fragment() {
 
     private var fullName = ""
     private var locationString = ""
+    private var userName = ""
     lateinit var location: Location
     lateinit var emergencyStations: List<EmergencyStation>
     var emergencyType = 10 // default medical
@@ -72,16 +76,21 @@ class ProcessEmergencyFragment : Fragment() {
 
             // 3. third step, send emergency
             viewModel.sendEmergencyNotificationToServices(
-                Firebase.auth.currentUser!!.uid, station.uid, location,
-                "$fullName -- $locationString",
-                emergencyType.toString()
+                userId = Firebase.auth.currentUser!!.uid,
+                emergencyStationId = station.uid,
+                stationName = station.stationName,
+                userName = userName,
+                coordinates = location,  //"$fullName -- $locationString",
+                emergencyMessageBody = String.format(Locale.ENGLISH, DEFAULT_MESSAGE, fullName),
+                emergencyType = emergencyType.toString()
             )
         }
 
         viewModel.user.observe(viewLifecycleOwner) { user ->
-            binding.fullName.text = user.fullName
-            binding.phoneNumber.text = user.phoneNumber
-            fullName = user.fullName
+            binding.fullName.text = user.fullName.trim()
+            binding.phoneNumber.text = user.phoneNumber.trim()
+            fullName = user.fullName.trim()
+            userName = user.fullName.trim()
         }
 
         viewModel.allEmergencyStations.observe(viewLifecycleOwner) {
@@ -138,7 +147,7 @@ class ProcessEmergencyFragment : Fragment() {
             }
         }
 
-        Log.d("TAG", "FOUND STATION ${foundStation.toString()}  Distance: $shortestDistance")
+        Log.d("TAG", "FOUND STATION $foundStation  Distance: $shortestDistance")
         binding.stepTwo.isChecked = true
 
         // if nothing was found, stop program, this is highly unlikely
@@ -148,7 +157,7 @@ class ProcessEmergencyFragment : Fragment() {
         return foundStation
     }
 
-    private fun stepThreeSendEmergency() {
-
+    companion object {
+        const val DEFAULT_MESSAGE = "%s is reporting an emergency. Find attached coordinates to location."
     }
 }

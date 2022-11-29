@@ -44,12 +44,13 @@ class RegisterUserFragment : Fragment() {
         initializeAreaCodes(view)
 
         binding.registerAccount.setOnClickListener {
-            val fullName = binding.userFullName.text.toString()
-            val phoneNUmber = binding.userPhoneNumber.text.toString()
-            val email = binding.userEmail.text.toString()
-            val password = binding.userPassword.text.toString()
+            val fullName = binding.userFullName.text.toString().trim()
+            val phoneNUmber = binding.userPhoneNumber.text.toString().trim()
+            val email = binding.userEmail.text.toString().trim()
+            val password = binding.userPassword.text.toString().trim()
+            val id = binding.userID.text.toString().trim()
 
-            createAccountWithEmailAndPassword(email, password, fullName, phoneNUmber)
+            createAccountWithEmailAndPassword(email, password, fullName, phoneNUmber, id)
         }
     }
 
@@ -67,6 +68,7 @@ class RegisterUserFragment : Fragment() {
         val password = binding.userPassword.text.toString().trim()
         val fullName = binding.userFullName.text.toString().trim()
         val phoneNumber = binding.userPhoneNumber.text.toString().trim()
+        val iD = binding.userID.text.toString().trim()
 
         var valid = true
 
@@ -97,6 +99,13 @@ class RegisterUserFragment : Fragment() {
             binding.userPhoneNumberContainer.error = null
         }
 
+        if (iD.isEmpty()) {
+            binding.userIDContainer.error = "Enter valid ID."
+            valid = false
+        } else {
+            binding.userIDContainer.error = null
+        }
+
         return valid
     }
 
@@ -104,7 +113,8 @@ class RegisterUserFragment : Fragment() {
         email: String,
         password: String,
         fullName: String,
-        phoneNumber: String
+        phoneNumber: String,
+        id: String
     ) {
         if (!validateForm()) return
         toggleLoadingState()
@@ -119,8 +129,12 @@ class RegisterUserFragment : Fragment() {
                         Firebase.auth.currentUser,
                         fullName,
                         email,
-                        phoneNumber
-                    )
+                        phoneNumber,
+                        id
+                    ) { user ->
+                        user.saveToPreferences(requireContext())
+                    }
+
                     Log.d("TAG", "CREATE DONE, REDIRECTING")
                     // redirect to home page, successfully logged in
                     startActivity(Intent(requireContext(), MainActivity::class.java))

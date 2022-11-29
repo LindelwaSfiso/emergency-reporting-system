@@ -68,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <org.xhanka.ndm_project.ui.dashboard.TapHoldUpButton
+    <org.xhanka.ndm_project.ui.report_emergency.report.TapHoldUpButton
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:id="@+id/tapAndHold"

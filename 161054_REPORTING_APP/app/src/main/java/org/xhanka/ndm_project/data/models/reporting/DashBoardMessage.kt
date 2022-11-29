@@ -21,7 +21,8 @@ data class DashBoardMessage(
             "${conversationId}.lastMessage" to lastMessage,
             "${conversationId}.timeStamp" to FieldValue.serverTimestamp(),
             "${conversationId}.uid" to uid,
-            "${conversationId}.senderUid" to senderUid
+            "${conversationId}.senderUid" to senderUid,
+            "${conversationId}.displayName" to displayName
         )
     }
 
