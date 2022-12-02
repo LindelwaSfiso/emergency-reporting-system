@@ -11,10 +11,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,8 +25,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.xhanka.ndm_project.databinding.ActivityMainBinding
+import org.xhanka.ndm_project.ui.contacts.first_responder.EmergencyStationViewModel
 import org.xhanka.ndm_project.ui.home.HomeViewModel
 import org.xhanka.ndm_project.utils.Constants.REQUEST_LOCATION_PERMISSION_CODE
 import org.xhanka.ndm_project.utils.Utils
@@ -38,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val homeViewModel by viewModels<HomeViewModel>()
+    private val viewModel by viewModels<EmergencyStationViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +89,14 @@ class MainActivity : AppCompatActivity() {
                     binding.navView.visibility = View.VISIBLE
                 }
             }
+        }
+
+        viewModel.errorState.observe(this) {
+            it?.let { message ->
+                if (message.isNotEmpty())
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            }
+            viewModel.resetMessage()
         }
     }
 
@@ -168,6 +182,15 @@ class MainActivity : AppCompatActivity() {
                     "geo:0,0?q=" + it.latitude +"," + it.longitude))
                 )
             }
+            return true
+        } else if (item.itemId == R.id.manuallySyncDatabase) {
+            AlertDialog.Builder(this)
+                .setTitle("Sync")
+                .setMessage("Manually sync first responder database?")
+                .setPositiveButton("Sync") { _, _->
+                    viewModel.retrieveFirstResponderDatabase()
+                }.show()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

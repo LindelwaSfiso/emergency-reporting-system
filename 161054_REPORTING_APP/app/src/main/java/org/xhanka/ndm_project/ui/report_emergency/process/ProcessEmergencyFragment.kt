@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -69,7 +70,7 @@ class ProcessEmergencyFragment : Fragment() {
             binding.warningText.text = String.format("Please wait while we process your emergency!")
 
             // 1. first step
-            stepOneInitiateSms(fullName, locationString)
+            stepOneInitiateSms(fullName, "${location.latitude},${location.longitude}")
 
             // 2. second step
             val station = stepTwoLocatingNearestStation()
@@ -83,7 +84,10 @@ class ProcessEmergencyFragment : Fragment() {
                 coordinates = location,  //"$fullName -- $locationString",
                 emergencyMessageBody = String.format(Locale.ENGLISH, DEFAULT_MESSAGE, fullName),
                 emergencyType = emergencyType.toString()
-            )
+            ) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                binding.location.text = String.format("An error occurred: [possibly network error]")
+            }
         }
 
         viewModel.user.observe(viewLifecycleOwner) { user ->

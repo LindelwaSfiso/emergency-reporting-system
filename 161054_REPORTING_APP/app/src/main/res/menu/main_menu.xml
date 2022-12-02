@@ -6,4 +6,10 @@
         app:showAsAction="ifRoom"
         android:title="@string/view_in_map"
         android:id="@+id/viewInMaps"/>
+
+    <item
+        android:id="@+id/manuallySyncDatabase"
+        android:icon="@drawable/ic_sync"
+        android:title="Manually Sync"
+        app:showAsAction="ifRoom"/>
 </menu>

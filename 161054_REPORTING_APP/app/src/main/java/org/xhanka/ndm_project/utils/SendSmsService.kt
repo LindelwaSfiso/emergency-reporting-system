@@ -116,6 +116,6 @@ class SendSmsService: LifecycleService() {
         const val NOTIFICATION_ID = 160
         const val NOTIFICATION_CHANNEL_ID = "com.xhanka.ndm"
         const val ACTION_SEND_SMS = "send_sms"
-        const val DEFAULT_SMS_MESSAGE = "[ALERT] Hi? %s here. I'm in an emergency, you can find me here https://maps.google.com/?q=%s.)"
+        const val DEFAULT_SMS_MESSAGE = "[ALERT] Hi? %s here. I'm in an emergency, you can find me here https://maps.google.com/?q=%s"
     }
 }

@@ -126,10 +126,6 @@ class HomeFragment : Fragment() {
             showLocationUpdates()
             victimLocation = it
 
-            // val results = FloatArray(5)
-            // Location.distanceBetween(it.latitude, it.longitude, -26.4857118,31.3090501, results)
-            // Log.d("TAG", "DISTANCE IS:\t${results[0]}")
-
             binding.userLatitude.text = it.latitude.toString()
             binding.userLongitude.text = it.longitude.toString()
 

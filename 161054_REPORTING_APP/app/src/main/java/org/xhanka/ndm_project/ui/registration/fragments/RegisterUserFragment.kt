@@ -156,6 +156,8 @@ class RegisterUserFragment : Fragment() {
         binding.userFullName.isEnabled = !shouldShow
         binding.userEmail.isEnabled = !shouldShow
         binding.userPhoneNumber.isEnabled = !shouldShow
+        binding.areaCode.isEnabled = !shouldShow
+        binding.userID.isEnabled = !shouldShow
         binding.userPassword.isEnabled = !shouldShow
         binding.registerAccount.isEnabled = !shouldShow
     }

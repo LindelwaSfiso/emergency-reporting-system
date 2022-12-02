@@ -68,12 +68,12 @@ class ReportEmergencyFragment : Fragment() {
             }
 
             override fun onClick(v: View?) {
-                // todo: test case, remove
-                Toast.makeText(requireContext(), "Click and hold", Toast.LENGTH_SHORT).show()
-                val confirmDialog = ConfirmEmergencyBottomFragment.newInstance(
-                    location, "hi, im in an emergency. i need an ambulance"
-                )
-                confirmDialog.show(childFragmentManager, "confirm_dialog")
+//todo: test case, remove
+//                Toast.makeText(requireContext(), "Click and hold", Toast.LENGTH_SHORT).show()
+//                val confirmDialog = ConfirmEmergencyBottomFragment.newInstance(
+//                    location, "hi, im in an emergency. i need an ambulance"
+//                )
+//                confirmDialog.show(childFragmentManager, "confirm_dialog")
             }
         })
 

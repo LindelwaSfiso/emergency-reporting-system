@@ -24,7 +24,7 @@ import org.xhanka.ndm_project.R
 
 @AndroidEntryPoint
 class UserProfileFragment : PreferenceFragmentCompat(), MenuProvider {
-    private val userViewModel by viewModels<UserViewModel>()
+    private val settingsViewModel by viewModels<SettingsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

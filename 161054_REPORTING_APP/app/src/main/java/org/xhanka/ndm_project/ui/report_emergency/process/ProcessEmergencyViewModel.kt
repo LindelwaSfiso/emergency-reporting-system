@@ -42,53 +42,66 @@ class ProcessEmergencyViewModel @Inject constructor(dataBase: MainDataBase): Vie
         userName: String,
         coordinates: Location,
         emergencyMessageBody: String,
-        emergencyType: String
+        emergencyType: String,
+        error: (errorString: String) -> Unit
     ) = viewModelScope.launch(Dispatchers.IO) {
         val conversationId = Utils.getGroupChatId(userId, emergencyStationId)
 
-        // check if conversation between the two users exists
-        val document = db.collection(Constants.DB_EMERGENCIES_COLLECTION)
-            .document(conversationId).get().await()
-        if (!document.exists())
+        try {
+            // check if conversation between the two users exists
+            val document = db.collection(Constants.DB_EMERGENCIES_COLLECTION)
+                .document(conversationId).get().await()
+            if (!document.exists())
+                db.collection(Constants.DB_EMERGENCIES_COLLECTION)
+                    .document(conversationId).set(
+                        mapOf(
+                            "created" to true,
+                            "messages" to emptyList<String>() // investigate this
+                        ), SetOptions.merge()
+                    ).await()
+
+            // 1. set last message into [emergency_logs] under group_id/last_message
+            // 2. insert new message into [emergency_logs] under group_id/messages
+
+            // 1. Update dashboard of current user
+            db.collection(DB_USER_DASHBOARD_COLLECTION)
+                .document(userId)
+                .update(
+                    DashBoardMessage(
+                        lastMessage = emergencyMessageBody,
+                        uid = emergencyStationId,
+                        senderUid = userId,
+                        displayName = stationName
+                    ).toHash(conversationId)
+                ).await()
+
+            // 2. update dashboard of other user
+            db.collection(DB_USER_DASHBOARD_COLLECTION)
+                .document(emergencyStationId)
+                .update(
+                    DashBoardMessage(
+                        lastMessage = emergencyMessageBody,
+                        uid = userId,
+                        senderUid = userId,
+                        displayName = userName
+                    ).toHash(conversationId)
+                ).await()
+
             db.collection(Constants.DB_EMERGENCIES_COLLECTION)
-                .document(conversationId).set(mapOf(
-                    "created" to true,
-                    "messages" to emptyList<String>() // investigate this
-                ), SetOptions.merge()).await()
+                .document(conversationId)
+                .update(
+                    "messages", EmergencyMessage.toHash(
+                        emergencyLocation = "${coordinates.latitude},${coordinates.longitude}",
+                        emergencyMessageBody = emergencyMessageBody,
+                        emergencyType = emergencyType,
+                        senderUid = userId
+                    )
+                ).await()
 
-        // 1. set last message into [emergency_logs] under group_id/last_message
-        // 2. insert new message into [emergency_logs] under group_id/messages
+            _done.postValue(true)
+        }  catch (exception: Exception) {
 
-        // 1. Update dashboard of current user
-        db.collection(DB_USER_DASHBOARD_COLLECTION)
-            .document(userId)
-            .update(DashBoardMessage(
-                lastMessage = emergencyMessageBody,
-                uid = emergencyStationId,
-                senderUid = userId,
-                displayName = stationName
-            ).toHash(conversationId)).await()
-
-        // 2. update dashboard of other user
-        db.collection(DB_USER_DASHBOARD_COLLECTION)
-            .document(emergencyStationId)
-            .update(DashBoardMessage(
-                lastMessage = emergencyMessageBody,
-                uid = userId,
-                senderUid = userId,
-                displayName = userName
-            ).toHash(conversationId)).await()
-
-        db.collection(Constants.DB_EMERGENCIES_COLLECTION)
-            .document(conversationId)
-            .update("messages", EmergencyMessage.toHash(
-                emergencyLocation = "${coordinates.latitude},${coordinates.longitude}",
-                emergencyMessageBody = emergencyMessageBody,
-                emergencyType = emergencyType,
-                senderUid = userId
-            )).await()
-
-        _done.postValue(true)
+        }
 
     }
 

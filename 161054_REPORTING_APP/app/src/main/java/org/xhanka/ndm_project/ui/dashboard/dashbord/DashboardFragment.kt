@@ -41,8 +41,22 @@ class DashboardFragment : Fragment() {
         val adapter = DashBoardMessagesAdapter(findNavController())
         binding.recyclerView.adapter = adapter
 
-        dashboardViewModel.dashBoardMessages.observe(viewLifecycleOwner){
-            adapter.submitList(it)
+        dashboardViewModel.dashBoardMessages.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it.isEmpty()) {
+                    binding.recyclerView.visibility = View.GONE
+                    binding.emptyView.visibility = View.VISIBLE
+                } else {
+                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.emptyView.visibility = View.GONE
+                    val sorted = it.sortedBy { dashBoardMessage -> dashBoardMessage.timeStamp }
+                    adapter.submitList(sorted)
+                }
+            } ?: run {
+                binding.recyclerView.visibility = View.GONE
+                binding.emptyView.visibility = View.VISIBLE
+            }
+
         }
 
         dashboardViewModel.subscribeToUserDashBoard(Firebase.auth.currentUser!!.uid)

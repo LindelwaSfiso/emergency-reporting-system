@@ -75,4 +75,8 @@ class SettingsFragment : PreferenceFragmentCompat(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return false
     }
+
+    companion object {
+        const val DB_VERSION = "database_version"
+    }
 }
