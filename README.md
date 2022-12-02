@@ -80,3 +80,12 @@ git config --global --unset http.proxy
 2. sfisodummy1@gmail.com rootroot
 
 3. sfisodummy2@gmail.com rootroot
+
+
+
+### Download link for Application
+https://github.com/LindelwaSfiso/emergency-reporting-system/blob/master/161054_REPORTING_APP/app/release/app-release.apk
+
+
+### Web application url
+https://eswatiniemergencyservices.netlify.app/

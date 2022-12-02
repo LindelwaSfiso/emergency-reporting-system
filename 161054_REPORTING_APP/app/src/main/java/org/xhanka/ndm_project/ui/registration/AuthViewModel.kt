@@ -3,10 +3,12 @@ package org.xhanka.ndm_project.ui.registration
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.withTransaction
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.xhanka.ndm_project.data.database.MainDataBase
+import org.xhanka.ndm_project.data.models.contacts.EmergencyStation
 import org.xhanka.ndm_project.data.models.user.User
+import org.xhanka.ndm_project.utils.Constants
 import org.xhanka.ndm_project.utils.Constants.DB_USERS_COLLECTION
 import org.xhanka.ndm_project.utils.Constants.DB_USER_DASHBOARD_COLLECTION
 import javax.inject.Inject
@@ -22,6 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel() {
     private val userProfileDao = database.userProfileDao()
+    private val emergencyStationDao = database.emergencyStationsDao()
+
     private val db = Firebase.firestore
 
     /**
@@ -70,6 +76,7 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
                 // if above operation is successful, save user locally
                 userProfileDao.removeUserProfile()
                 userProfileDao.insertUserProfile(user)
+                syncDataBase()
                 doneFunction (user)
             } catch (ignore: Exception) {
                 Log.d("TAG", ignore.message.toString())
@@ -87,6 +94,7 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
                     userProfileDao.removeUserProfile()
                     userProfileDao.insertUserProfile(user!!)
                 }
+                syncDataBase()
             }
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -95,5 +103,18 @@ class AuthViewModel @Inject constructor(val database: MainDataBase): ViewModel()
         // end activity if everything is done
         // consider retrying for getting profile
         doneFunction(user)
+    }
+
+    private fun syncDataBase() = viewModelScope.launch (Dispatchers.IO) {
+        val db = Firebase.firestore
+        try {
+            val loadStations = db.collection(Constants.DB_STATIONS_COLLECTION).get().await()
+            val stations = loadStations.toObjects<EmergencyStation>()
+            database.withTransaction {
+                emergencyStationDao.deleteAllEmergencyStations()
+                emergencyStationDao.insertEmergencyStations(stations)
+            }
+            Log.d("TAG", "DONE UPDATING DATABASE")
+        } catch (ignore: Exception) { }
     }
 }
