@@ -5,7 +5,6 @@ import 'react-chat-widget/lib/styles.css';
 export const MessageSender = ({message}) => {
     return <div className={"message-wrapper-sender"}>
         <p className={"sender-bubble"}>{message.emergencyMessageBody}</p>
-        <a className={"sender-bubble"}>{message.emergencyLocation}</a>
     </div>
 }
 
@@ -30,4 +29,6 @@ export const MessageReceiver = ({message}) => {
         "seconds": 1667077829,
         "nanoseconds": 17000000
     }
+
+<a className={"sender-bubble"}>{message.emergencyLocation}</a>
 }*/
