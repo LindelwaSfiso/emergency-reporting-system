@@ -2,19 +2,23 @@
 
 # Emergency Reporting Application
 
-This is a project aimed at developing a system that will be used for reporting emergencies in the Kingdom of Eswatini. It
-combines all emergency contact numbers currently available into a compact system, where the user is not required to
-know all these numbers.
+This is a project that aims to provide a mechanism for reporting emergencies in the Kingdom of Eswatini. It unifies all existing emergency 
+contact numbers into a compact system in which the user is not required to know all of these numbers.
 
-The system will automatically route a victim to the nearest service point without having to connect via a base station
-as it is now.
-The system should be able to alert all users about a pending emergency, for example if there is serious road accident,
-emergency personnel should be able to notify the general public about the accident so they can take alternative routes.
+The technology will automatically route a victim to the nearest service point, rather than connecting via a base station as it currently does. 
+The system should be able to notify all users of an impending emergency. 
+For example, if there is a significant traffic accident, emergency personnel should be able to notify the general public so that other 
+routes may be used.
 
-The app will also have weather forecasting abilities, this will help people plan ahead to avoid emergencies.
+To improve on current solutions, the mobile application will send the user's data and GPS coordinates to the emergency response station. 
+This allows the emergency response station to rapidly pinpoint the victim and so respond to them much more swiftly.
 
-The system will also be used to notify emergency contact numbers of a victim if they need help. User should be able to
-cancel an emergency via the application to avoid waste of resources.
+In a crisis, we customarily want to contact our loved ones so they can rush to our rescue, but this may be time consuming if you have a 
+significant number of people to notify.
+The app provides a better and quicker way to achieve this by allowing the victim to register emergency contacts,
+and the app will send bulk SMS messages to these contacts in the event of an emergency.
+The SMS also contains the victim's location.
+
 
 ### How it works
 
