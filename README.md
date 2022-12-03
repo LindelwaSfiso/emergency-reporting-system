@@ -35,14 +35,11 @@ The SMS also contains the victim's location.
 - Android OS
 - FireBase
 - MUI (web frontend)
-- ReactJS 
+- ReactJS, MUI ICons, RouterDom
 
 ### Project write up doc
 
 - Using TexLive 2021
-- Acronyms removed for now (April)
-- Missing diagrams
-
 
 
 ### Common commands
@@ -88,7 +85,7 @@ git config --global --unset http.proxy
 
 
 ### Download link for Application
-https://github.com/LindelwaSfiso/emergency-reporting-system/blob/master/161054_REPORTING_APP/app/release/app-release.apk
+[https://github.com/LindelwaSfiso/emergency-reporting-system/blob/master/161054_REPORTING_APP/app/release/app-release.apk](https://github.com/LindelwaSfiso/emergency-reporting-system/releases/download/v0.0.1/eswatini-emergency-app.apk)
 
 
 ### Web application url
